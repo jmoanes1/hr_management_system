@@ -238,7 +238,7 @@ def employee_create_view(request):
         messages.success(request, f"Employee {employee.full_name} created successfully.")
         return redirect("employees:detail", pk=employee.pk)
 
-    return render(request, "employees/form.html", {"form": form, "title": "Add Employee"})
+    return render(request, "employees/form.html", {"form": form, "title": "Add employee"})
 
 
 @employee_account_admin_required
@@ -261,7 +261,7 @@ def employee_edit_view(request, pk):
         return redirect("employees:detail", pk=employee.pk)
 
     return render(request, "employees/form.html", {
-        "form": form, "employee": employee, "title": "Edit Employee",
+        "form": form, "employee": employee, "title": "Edit employee",
     })
 
 

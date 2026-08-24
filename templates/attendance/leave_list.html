@@ -13,7 +13,6 @@
     <header class="att-page-header">
         <div class="att-page-header-main">
             <h1>Leave requests</h1>
-            <p class="att-page-subtitle">Track and manage time-off requests</p>
         </div>
         <div class="att-page-header-actions">
             <a href="{% url 'attendance:leave_request' %}" class="btn btn-primary btn-sm">New request</a>
@@ -23,38 +22,42 @@
     {% include "includes/attendance_tabs.html" with active_tab="leave" %}
 
     {% if can_manage %}
-    <section class="att-stats att-stats--compact" aria-label="Leave summary">
-        <article class="att-stat">
-            <span class="att-stat-value">{{ on_leave_count }}</span>
-            <span class="att-stat-label">On leave today</span>
-        </article>
-        <article class="att-stat">
-            <span class="att-stat-value">{{ pending_count }}</span>
-            <span class="att-stat-label">Pending requests</span>
-        </article>
-        <article class="att-stat">
-            <span class="att-stat-value">{{ leaves|length }}</span>
-            <span class="att-stat-label">Total requests</span>
-        </article>
+    <section class="att-overview" aria-label="Leave summary">
+        <div class="att-overview-grid att-overview-grid--3">
+            <div class="att-overview-stat">
+                <span class="att-overview-label">On leave today</span>
+                <span class="att-overview-value">{{ on_leave_count }}</span>
+            </div>
+            <div class="att-overview-stat">
+                <span class="att-overview-label">Pending</span>
+                <span class="att-overview-value">{{ pending_count }}</span>
+            </div>
+            <div class="att-overview-stat">
+                <span class="att-overview-label">Requests</span>
+                <span class="att-overview-value">{{ leaves|length }}</span>
+            </div>
+        </div>
     </section>
     {% else %}
-    <section class="att-stats att-stats--compact" aria-label="Leave summary">
-        <article class="att-stat">
-            <span class="att-stat-value">{{ leaves|length }}</span>
-            <span class="att-stat-label">Total requests</span>
-        </article>
-        <article class="att-stat">
-            <span class="att-stat-value">{{ pending_count }}</span>
-            <span class="att-stat-label">Pending</span>
-        </article>
-        <article class="att-stat">
-            <span class="att-stat-value">{{ approved_days }}</span>
-            <span class="att-stat-label">Approved days</span>
-        </article>
-        <article class="att-stat">
-            <span class="att-stat-value">{{ on_leave_count }}</span>
-            <span class="att-stat-label">On leave today</span>
-        </article>
+    <section class="att-overview" aria-label="Leave summary">
+        <div class="att-overview-grid">
+            <div class="att-overview-stat">
+                <span class="att-overview-label">Requests</span>
+                <span class="att-overview-value">{{ leaves|length }}</span>
+            </div>
+            <div class="att-overview-stat">
+                <span class="att-overview-label">Pending</span>
+                <span class="att-overview-value">{{ pending_count }}</span>
+            </div>
+            <div class="att-overview-stat">
+                <span class="att-overview-label">Approved days</span>
+                <span class="att-overview-value">{{ approved_days }}</span>
+            </div>
+            <div class="att-overview-stat">
+                <span class="att-overview-label">On leave today</span>
+                <span class="att-overview-value">{{ on_leave_count }}</span>
+            </div>
+        </div>
     </section>
     {% endif %}
 
@@ -95,7 +98,7 @@
                                 <form action="{% url 'attendance:leave_review' leave.pk %}" method="post" class="inline-form att-review-form">
                                     {% csrf_token %}
                                     <input type="hidden" name="action" value="rejected">
-                                    <button type="submit" class="btn btn-sm btn-outline">Reject</button>
+                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
                                 </form>
                                 {% else %}
                                 <span class="text-muted">—</span>

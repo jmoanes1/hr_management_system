@@ -8,38 +8,76 @@
 {% endblock %}
 
 {% block content %}
-<div class="perf-page page-shell perf-page-narrow">
+<div class="perf-page page-shell perf-form-page">
 
-    <nav class="perf-breadcrumb">
+    <nav class="perf-breadcrumb" aria-label="Breadcrumb">
+        <a href="{% url 'performance:dashboard' %}">Performance</a>
+        <span aria-hidden="true">/</span>
         <a href="{% url 'performance:goals' %}">Goals</a>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
         <span>{{ title }}</span>
     </nav>
 
     <header class="perf-page-header">
         <div class="perf-page-header-main">
             <h1>{{ title }}</h1>
+            <p class="perf-page-subtitle">Set a KPI or development target</p>
         </div>
     </header>
 
-    <section class="perf-section perf-form-section">
-        <div class="perf-section-body" style="padding:1.25rem">
-            <form method="post" class="form-grid" novalidate>
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="form-group {% if field.name in 'description' %}form-group-full{% endif %}">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
-                </div>
-                {% endfor %}
-                <div class="form-actions form-group-full">
-                    <button type="submit" class="btn btn-primary">Save goal</button>
-                    <a href="{% url 'performance:goals' %}" class="btn btn-outline">Cancel</a>
-                </div>
-            </form>
+    <form method="post" class="perf-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <div class="perf-form-fields">
+            {% if can_manage %}
+            <div class="form-group perf-form-span">
+                <label for="{{ form.employee.id_for_label }}">{{ form.employee.label }} *</label>
+                {{ form.employee }}
+                {% if form.employee.errors %}<span class="form-error">{{ form.employee.errors.0 }}</span>{% endif %}
+            </div>
+            {% endif %}
+
+            <div class="form-group perf-form-span">
+                <label for="{{ form.title.id_for_label }}">{{ form.title.label }} *</label>
+                {{ form.title }}
+                {% if form.title.errors %}<span class="form-error">{{ form.title.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.target_date.id_for_label }}">{{ form.target_date.label }}</label>
+                {{ form.target_date }}
+                {% if form.target_date.errors %}<span class="form-error">{{ form.target_date.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.status.id_for_label }}">{{ form.status.label }} *</label>
+                {{ form.status }}
+                {% if form.status.errors %}<span class="form-error">{{ form.status.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.progress.id_for_label }}">{{ form.progress.label }}</label>
+                {{ form.progress }}
+                <span class="form-help">0–100</span>
+                {% if form.progress.errors %}<span class="form-error">{{ form.progress.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group perf-form-span">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                <span class="form-help">Optional context for this goal</span>
+                {% if form.description.errors %}<span class="form-error">{{ form.description.errors.0 }}</span>{% endif %}
+            </div>
         </div>
-    </section>
+
+        <div class="perf-form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Save goal</button>
+            <a href="{% url 'performance:goals' %}" class="perf-text-link">Cancel</a>
+        </div>
+    </form>
 
 </div>
 {% endblock %}

@@ -45,6 +45,7 @@
                 document.querySelectorAll('.user-dropdown.show, .notification-dropdown.show').forEach(el => {
                     el.classList.remove('show');
                 });
+                document.getElementById('notificationBtn')?.setAttribute('aria-expanded', 'false');
                 if (window.Modal) Modal.close();
                 return;
             }

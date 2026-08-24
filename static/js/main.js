@@ -136,15 +136,32 @@
     window.Modal = Modal;
 
     function initSidebar() {
-        // Keep the full sidebar visible — clear any leftover collapse prefs
-        document.body.classList.remove('sidebar-collapsed', 'sidebar-hidden');
+        const collapseBtn = document.getElementById('sidebarCollapseBtn');
+        const applyCollapsed = (collapsed) => {
+            document.body.classList.toggle('sidebar-collapsed', collapsed);
+            if (collapseBtn) {
+                collapseBtn.setAttribute('aria-pressed', collapsed ? 'true' : 'false');
+                collapseBtn.setAttribute('aria-label', collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+                collapseBtn.title = collapsed ? 'Expand sidebar' : 'Collapse sidebar';
+            }
+        };
+
+        let collapsed = false;
         try {
-            localStorage.removeItem('sidebarCollapsed');
-            localStorage.removeItem('sidebarOpen');
-            Object.keys(localStorage)
-                .filter((key) => key.startsWith('navGroup_'))
-                .forEach((key) => localStorage.removeItem(key));
-        } catch (_) { /* ignore private-mode storage errors */ }
+            collapsed = localStorage.getItem('sidebarCollapsed') === '1';
+        } catch (_) { /* ignore */ }
+
+        if (window.innerWidth > 768) {
+            applyCollapsed(collapsed);
+        }
+
+        collapseBtn?.addEventListener('click', () => {
+            const next = !document.body.classList.contains('sidebar-collapsed');
+            applyCollapsed(next);
+            try {
+                localStorage.setItem('sidebarCollapsed', next ? '1' : '0');
+            } catch (_) { /* ignore */ }
+        });
     }
 
     function initNavigation() {
@@ -177,23 +194,32 @@
 
         const userMenuBtn = document.getElementById('userMenuBtn');
         const userDropdown = document.getElementById('userDropdown');
+        const notificationBtn = document.getElementById('notificationBtn');
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const syncExpanded = (btn, menu) => {
+            btn?.setAttribute('aria-expanded', menu?.classList.contains('show') ? 'true' : 'false');
+        };
+        const closeMenus = () => {
+            userDropdown?.classList.remove('show');
+            notificationDropdown?.classList.remove('show');
+            syncExpanded(userMenuBtn, userDropdown);
+            syncExpanded(notificationBtn, notificationDropdown);
+        };
         userMenuBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             userDropdown?.classList.toggle('show');
-            document.getElementById('notificationDropdown')?.classList.remove('show');
+            notificationDropdown?.classList.remove('show');
+            syncExpanded(userMenuBtn, userDropdown);
+            syncExpanded(notificationBtn, notificationDropdown);
         });
-        document.addEventListener('click', () => {
-            userDropdown?.classList.remove('show');
-            document.getElementById('notificationDropdown')?.classList.remove('show');
-        });
-
-        const notificationBtn = document.getElementById('notificationBtn');
-        const notificationDropdown = document.getElementById('notificationDropdown');
         notificationBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             notificationDropdown?.classList.toggle('show');
             userDropdown?.classList.remove('show');
+            syncExpanded(userMenuBtn, userDropdown);
+            syncExpanded(notificationBtn, notificationDropdown);
         });
+        document.addEventListener('click', closeMenus);
     }
 
     function initAlerts() {
@@ -208,26 +234,8 @@
         });
     }
 
-    function initTopbarClock() {
-        const clockEl = document.getElementById('topbarClockText');
-        if (!clockEl) return;
-
-        const tick = () => {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            const h12 = hours % 12 || 12;
-            clockEl.textContent = `${h12}:${minutes} ${ampm}`;
-        };
-
-        tick();
-        setInterval(tick, 30000);
-    }
-
     function initPagePolish() {
         document.body.classList.add('app-loaded');
-        initTopbarClock();
     }
 
     document.addEventListener('DOMContentLoaded', () => {

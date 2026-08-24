@@ -8,8 +8,8 @@
     if (!window.chartData) return;
 
     const colors = {
-        primary: '#6366f1',
-        palette: ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4', '#ec4899', '#64748b'],
+        primary: '#1D4ED8',
+        palette: ['#1D4ED8', '#0F766E', '#047857', '#B45309', '#B91C1C', '#334155', '#2563EB', '#64748B'],
         grid: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#e2e8f0',
         text: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#94a3b8'
     };

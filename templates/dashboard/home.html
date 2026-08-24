@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}Dashboard - Employee Directory{% endblock %}
+{% block page_section %}Overview{% endblock %}
+{% block page_heading %}Dashboard{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
@@ -13,96 +15,61 @@
     <header class="dash-header">
         <div class="dash-header-main">
             <p class="dash-header-date">{{ today|date:"l, F j, Y" }}</p>
-            <h1>Dashboard</h1>
-            <p class="dash-header-sub">Welcome back, <strong>{{ user.get_full_name|default:user.username }}</strong> · {{ active_rate }}% of employees active · {{ departments_count }} departments</p>
+            <h1>Workforce overview</h1>
+            <p class="dash-header-lead">Key people, leave, and hiring metrics for the organization.</p>
         </div>
         <div class="dash-header-actions">
-            <a href="{% url 'employees:list' %}" class="btn btn-primary btn-sm">Browse directory</a>
             {% if user.can_manage_employees %}
             <a href="{% url 'employees:create' %}" class="btn btn-outline btn-sm">Add employee</a>
             {% endif %}
+            <a href="{% url 'employees:list' %}" class="btn btn-primary btn-sm">Open directory</a>
         </div>
     </header>
 
-    <section class="dash-section" aria-label="Key metrics">
-        <h2 class="dash-section-title">Overview</h2>
-        <div class="card dash-overview-card">
-            <div class="card-body dash-overview-body">
-                <div class="dash-overview-grid">
-                    {% include "includes/dashboard_stat_card.html" with label="Total employees" value=total_employees trend=kpi_trends.total %}
-                    {% include "includes/dashboard_stat_card.html" with label="Active employees" value=active_employees trend=kpi_trends.active %}
-                    {% include "includes/dashboard_stat_card.html" with label="Departments" value=departments_count trend=kpi_trends.departments %}
-                    {% include "includes/dashboard_stat_card.html" with label="Upcoming birthdays" value=upcoming_birthdays trend=kpi_trends.birthdays %}
-                    {% include "includes/dashboard_stat_card.html" with label="On leave" value=on_leave_count trend=kpi_trends.on_leave trend_inverted=True %}
-                    {% include "includes/dashboard_stat_card.html" with label="New hires this month" value=new_this_month trend=kpi_trends.new_hires %}
-                </div>
-            </div>
+    <section class="dash-overview" aria-label="Key metrics">
+        <div class="dash-overview-grid">
+            {% include "includes/dashboard_stat_card.html" with label="Total employees" value=total_employees trend=kpi_trends.total %}
+            {% include "includes/dashboard_stat_card.html" with label="Active employees" value=active_employees trend=kpi_trends.active %}
+            {% include "includes/dashboard_stat_card.html" with label="Departments" value=departments_count trend=kpi_trends.departments %}
+            {% include "includes/dashboard_stat_card.html" with label="Pending requests" value=pending_leave_count %}
+            {% include "includes/dashboard_stat_card.html" with label="On leave today" value=on_leave_count trend=kpi_trends.on_leave trend_inverted=True %}
+            {% include "includes/dashboard_stat_card.html" with label="New this month" value=new_this_month trend=kpi_trends.new_hires %}
         </div>
     </section>
 
-    <section class="dash-quick-actions" aria-label="Quick actions">
-        <h2 class="dash-section-title">Quick actions</h2>
-        <div class="dash-quick-actions-grid">
-            <a href="{% url 'employees:list' %}" class="dash-quick-action">
-                <span class="dash-quick-action-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-                </span>
-                <span class="dash-quick-action-label">Find a colleague</span>
-                <span class="dash-quick-action-desc">Search the employee directory</span>
-            </a>
-            <a href="{% url 'portal:home' %}" class="dash-quick-action">
-                <span class="dash-quick-action-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-                </span>
-                <span class="dash-quick-action-label">My portal</span>
-                <span class="dash-quick-action-desc">Profile, documents, and requests</span>
-            </a>
-            <a href="{% url 'attendance:dashboard' %}" class="dash-quick-action">
-                <span class="dash-quick-action-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                </span>
-                <span class="dash-quick-action-label">Attendance</span>
-                <span class="dash-quick-action-desc">Timesheets and leave requests</span>
-            </a>
-            <a href="{% url 'chat:home' %}" class="dash-quick-action">
-                <span class="dash-quick-action-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-                </span>
-                <span class="dash-quick-action-label">Ask the assistant</span>
-                <span class="dash-quick-action-desc">Get answers about your team</span>
-            </a>
-        </div>
-    </section>
+    <nav class="dash-nav" aria-label="Quick actions">
+        <a href="{% url 'employees:list' %}" class="dash-nav-link">Employee directory</a>
+        <a href="{% url 'attendance:leave_list' %}" class="dash-nav-link">Leave requests</a>
+        <a href="{% url 'portal:home' %}" class="dash-nav-link">Self-service</a>
+        <a href="{% url 'attendance:dashboard' %}" class="dash-nav-link">Attendance</a>
+    </nav>
 
-    <section class="dash-section">
-        <h2 class="dash-section-title">Insights</h2>
+    <section class="dash-section" aria-label="Insights">
         <div class="dash-charts-row">
-            <div class="card dash-chart-card dash-chart-main">
-                <div class="card-header">
-                    <h3>Employees by department</h3>
+            <div class="dash-chart-card dash-chart-main">
+                <div class="dash-card-head">
+                    <h2>Employees by department</h2>
                 </div>
-                <div class="card-body dash-chart-body">
-                    <canvas id="deptChart" height="280"></canvas>
+                <div class="dash-chart-body">
+                    <canvas id="deptChart" height="240"></canvas>
                 </div>
             </div>
-            <div class="card dash-chart-card dash-chart-side">
-                <div class="card-header">
-                    <h3>Employment status</h3>
+            <div class="dash-chart-card dash-chart-side">
+                <div class="dash-card-head">
+                    <h2>Status</h2>
                 </div>
-                <div class="card-body dash-chart-body dash-chart-donut-wrap">
-                    <canvas id="statusChart" height="220"></canvas>
+                <div class="dash-chart-body dash-chart-donut-wrap">
+                    <canvas id="statusChart" height="200"></canvas>
                     <div id="statusLegend" class="dash-status-legend"></div>
                 </div>
             </div>
-        </div>
-        <div class="dash-charts-row dash-charts-single">
-            <div class="card dash-chart-card">
-                <div class="card-header">
-                    <h3>Hiring trends</h3>
+            <div class="dash-chart-card dash-chart-side">
+                <div class="dash-card-head">
+                    <h2>Hiring</h2>
                     <p class="dash-card-sub">Last 6 months</p>
                 </div>
-                <div class="card-body dash-chart-body">
-                    <canvas id="hireChart" height="240"></canvas>
+                <div class="dash-chart-body">
+                    <canvas id="hireChart" height="200"></canvas>
                 </div>
             </div>
         </div>
@@ -112,12 +79,12 @@
         <h2 class="dash-section-title">Today</h2>
         <div class="dash-panels dash-panels-ops">
             {% if user.can_manage_employees %}
-            <div class="card dash-panel">
-                <div class="card-header">
+            <div class="dash-panel">
+                <div class="dash-card-head">
                     <h3>Pending approvals</h3>
-                    <a href="{% url 'attendance:leave_list' %}" class="btn btn-sm btn-outline">Review</a>
+                    <a href="{% url 'attendance:leave_list' %}" class="dash-panel-link">Review</a>
                 </div>
-                <div class="card-body dash-panel-body">
+                <div class="dash-panel-body">
                     {% if pending_approvals %}
                     <div class="dash-hire-list">
                         {% for leave in pending_approvals %}
@@ -141,12 +108,12 @@
             </div>
             {% endif %}
 
-            <div class="card dash-panel">
-                <div class="card-header">
-                    <h3>On leave today</h3>
-                    <a href="{% url 'attendance:dashboard' %}" class="btn btn-sm btn-outline">View</a>
+            <div class="dash-panel">
+                <div class="dash-card-head">
+                    <h3>On leave</h3>
+                    <a href="{% url 'attendance:dashboard' %}" class="dash-panel-link">View</a>
                 </div>
-                <div class="card-body dash-panel-body">
+                <div class="dash-panel-body">
                     {% if employees_on_leave %}
                     <div class="dash-hire-list">
                         {% for emp in employees_on_leave %}
@@ -168,14 +135,14 @@
                 </div>
             </div>
 
-            <div class="card dash-panel">
-                <div class="card-header">
-                    <h3>Recent activity</h3>
+            <div class="dash-panel">
+                <div class="dash-card-head">
+                    <h3>Activity</h3>
                     {% if user.can_manage_employees %}
-                    <a href="{% url 'employees:audit_log' %}" class="btn btn-sm btn-outline">Logs</a>
+                    <a href="{% url 'employees:audit_log' %}" class="dash-panel-link">Logs</a>
                     {% endif %}
                 </div>
-                <div class="card-body dash-panel-body">
+                <div class="dash-panel-body">
                     {% if recent_activities %}
                     <div class="activity-list">
                         {% for log in recent_activities %}
@@ -200,14 +167,14 @@
     </section>
 
     <section class="dash-section">
-        <h2 class="dash-section-title">Updates</h2>
+        <h2 class="dash-section-title">People</h2>
         <div class="dash-panels">
-            <div class="card dash-panel">
-                <div class="card-header">
+            <div class="dash-panel">
+                <div class="dash-card-head">
                     <h3>Recent hires</h3>
-                    <a href="{% url 'employees:list' %}?sort=-date_hired" class="btn btn-sm btn-outline">View all</a>
+                    <a href="{% url 'employees:list' %}?sort=-date_hired" class="dash-panel-link">View all</a>
                 </div>
-                <div class="card-body dash-panel-body">
+                <div class="dash-panel-body">
                     {% if recent_hires %}
                     <div class="dash-hire-list">
                         {% for emp in recent_hires %}
@@ -217,10 +184,7 @@
                                 <span class="dash-hire-name">{{ emp.full_name }}</span>
                                 <span class="dash-hire-meta">{{ emp.position.title }}</span>
                             </div>
-                            <div class="dash-hire-right">
-                                <span class="dash-hire-dept">{{ emp.department.name }}</span>
-                                <span class="dash-hire-date">{{ emp.date_hired|date:"M d" }}</span>
-                            </div>
+                            <span class="dash-hire-date">{{ emp.date_hired|date:"M d" }}</span>
                         </a>
                         {% endfor %}
                     </div>
@@ -233,22 +197,21 @@
                 </div>
             </div>
 
-            <div class="card dash-panel">
-                <div class="card-header">
+            <div class="dash-panel">
+                <div class="dash-card-head">
                     <h3>Announcements</h3>
                     {% if user.can_manage_employees %}
-                    <a href="{% url 'employees:announcements' %}" class="btn btn-sm btn-outline">Manage</a>
+                    <a href="{% url 'employees:announcements' %}" class="dash-panel-link">Manage</a>
                     {% endif %}
                 </div>
-                <div class="card-body dash-panel-body">
+                <div class="dash-panel-body">
                     {% if announcements %}
                     <div class="dash-announce-list">
                         {% for ann in announcements %}
                         <article class="dash-announce-item">
-                            <div class="dash-announce-dot"></div>
                             <div>
                                 <h4>{{ ann.title }}</h4>
-                                <p>{{ ann.content|truncatewords:22 }}</p>
+                                <p>{{ ann.content|truncatewords:18 }}</p>
                                 <time>{{ ann.created_at|date:"M d, Y" }}</time>
                             </div>
                         </article>
@@ -263,26 +226,28 @@
                 </div>
             </div>
 
-            <div class="card dash-panel" id="celebrations">
-                <div class="card-header">
+            <div class="dash-panel" id="celebrations">
+                <div class="dash-card-head">
                     <h3>Celebrations</h3>
                 </div>
-                <div class="card-body dash-panel-body">
+                <div class="dash-panel-body">
                     {% if birthday_employees or anniversary_employees %}
-                    <div class="dash-celebrate-list">
+                    <div class="dash-hire-list">
                         {% for emp in birthday_employees %}
-                        <a href="{% url 'employees:detail' emp.pk %}" class="dash-celebrate-item dash-celebrate-birthday">
-                            <span class="dash-celebrate-tag">Birthday</span>
-                            <div>
-                                <strong>{{ emp.full_name }}</strong>
+                        <a href="{% url 'employees:detail' emp.pk %}" class="dash-hire-item">
+                            <div class="avatar avatar-sm">{{ emp.initials }}</div>
+                            <div class="dash-hire-info">
+                                <span class="dash-hire-name">{{ emp.full_name }}</span>
+                                <span class="dash-hire-meta">Birthday</span>
                             </div>
                         </a>
                         {% endfor %}
                         {% for emp in anniversary_employees %}
-                        <a href="{% url 'employees:detail' emp.pk %}" class="dash-celebrate-item dash-celebrate-anniv">
-                            <span class="dash-celebrate-tag">Anniversary</span>
-                            <div>
-                                <strong>{{ emp.full_name }}</strong>
+                        <a href="{% url 'employees:detail' emp.pk %}" class="dash-hire-item">
+                            <div class="avatar avatar-sm">{{ emp.initials }}</div>
+                            <div class="dash-hire-info">
+                                <span class="dash-hire-name">{{ emp.full_name }}</span>
+                                <span class="dash-hire-meta">Work anniversary</span>
                             </div>
                         </a>
                         {% endfor %}

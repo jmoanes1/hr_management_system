@@ -59,10 +59,10 @@
                         <span>{{ doc.get_document_type_display }} · {{ doc.created_at|date:"M d, Y" }}</span>
                     </div>
                     <div class="ss-doc-actions">
-                        <a href="{% url 'portal:document_download' doc.pk %}" class="btn btn-sm btn-outline">Download</a>
+                        <a href="{% url 'portal:document_download' doc.pk %}" class="ui-text-link">Download</a>
                         <form action="{% url 'portal:document_delete' doc.pk %}" method="post" class="inline-form">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-sm btn-outline ss-delete-btn">Delete</button>
+                            <button type="submit" class="ui-text-link is-danger ss-delete-btn">Delete</button>
                         </form>
                     </div>
                 </div>

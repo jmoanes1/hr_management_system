@@ -61,7 +61,7 @@ def review_create_view(request):
         log_activity(request, "create", f"Performance review: {review.employee.full_name}", "PerformanceReview", review.pk)
         messages.success(request, "Performance review created.")
         return redirect("performance:dashboard")
-    return render(request, "performance/review_form.html", {"form": form, "title": "New Performance Review"})
+    return render(request, "performance/review_form.html", {"form": form, "title": "New review"})
 
 
 @login_required
@@ -108,4 +108,8 @@ def goal_create_view(request):
         goal.save()
         messages.success(request, "Goal created.")
         return redirect("performance:goals")
-    return render(request, "performance/goal_form.html", {"form": form, "title": "New Goal", "can_manage": request.user.can_manage_employees()})
+    return render(request, "performance/goal_form.html", {
+        "form": form,
+        "title": "New goal",
+        "can_manage": request.user.can_manage_employees(),
+    })

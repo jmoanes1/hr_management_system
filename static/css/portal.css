@@ -27,21 +27,32 @@
 }
 
 .ss-page-header-main h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin: 0 0 0.25rem;
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0;
     color: var(--text-primary);
+    text-transform: none;
 }
 
 .ss-page-subtitle {
-    margin: 0;
+    margin: 0.25rem 0 0;
     font-size: 0.875rem;
+    line-height: 1.45;
     color: var(--text-muted);
 }
 
+.ss-page .ss-page-subtitle {
+    display: none;
+}
+
+.ss-page-narrow .ss-page-subtitle {
+    display: block;
+}
+
 .ss-profile-meter {
-    min-width: 140px;
+    display: none;
 }
 
 .ss-profile-meter-label {
@@ -77,32 +88,31 @@
 .ss-nav {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: 1rem 1.25rem;
+    padding-bottom: 0.25rem;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
 .ss-nav-link {
     display: inline-flex;
-    padding: 0.4375rem 0.875rem;
+    padding: 0 0 0.5rem;
     font-size: 0.8125rem;
     font-weight: 500;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     text-decoration: none;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    transition: color var(--transition), border-color var(--transition), background var(--transition);
+    background: transparent;
+    border: none;
+    border-radius: 0;
 }
 
 .ss-nav-link:hover {
     color: var(--color-primary);
-    border-color: var(--color-primary);
-    background: var(--color-primary-light);
+    background: transparent;
+    border: none;
 }
 
 .ss-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1rem;
+    display: none;
 }
 
 .ss-card {
@@ -140,10 +150,11 @@
 }
 
 .ss-section {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 0;
+    overflow: visible;
 }
 
 .ss-section-header {
@@ -151,16 +162,18 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.875rem 1.125rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--bg-body);
+    padding: 0.875rem 0 0.5rem;
+    border-bottom: none;
+    background: transparent;
 }
 
 .ss-section-header h2 {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-primary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 .ss-section-meta {
@@ -169,11 +182,11 @@
 }
 
 .ss-section-body {
-    padding: 1rem 1.125rem 1.125rem;
+    padding: 0 0 1rem;
 }
 
 .ss-form-card .ss-section-body {
-    padding: 1.25rem;
+    padding: 0;
 }
 
 .ss-balance-list {
@@ -188,10 +201,11 @@
     justify-content: space-between;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.625rem 0.75rem;
-    background: var(--bg-body);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
+    padding: 0.625rem 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: 0;
     font-size: 0.875rem;
 }
 
@@ -245,6 +259,12 @@
     color: var(--text-muted);
 }
 
+.ss-list-status {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
 .ss-muted {
     margin: 0;
     font-size: 0.875rem;
@@ -285,10 +305,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    background: var(--bg-body);
+    padding: 0.75rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: 0;
+    background: transparent;
 }
 
 .ss-doc-info {
@@ -319,17 +340,13 @@
 }
 
 .ss-delete-btn:hover {
-    border-color: var(--color-danger);
-    background: var(--color-danger-light);
-    color: var(--color-danger);
+    text-decoration: underline;
 }
 
 .ss-empty {
-    text-align: center;
-    padding: 3rem 1.5rem;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
+    padding: 2rem 0;
+    background: transparent;
+    border: none;
 }
 
 .ss-empty h3 {
@@ -384,59 +401,71 @@
 }
 
 .mgr-page-header-main h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin: 0 0 0.25rem;
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0;
     color: var(--text-primary);
+    text-transform: none;
 }
 
 .mgr-page-subtitle {
-    margin: 0;
-    font-size: 0.875rem;
-    color: var(--text-muted);
+    display: none;
 }
 
 .mgr-page-header-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.mgr-stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    align-items: center;
     gap: 1rem;
 }
 
-.mgr-stat {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    padding: 1rem 1.125rem;
+.mgr-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 0.875rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
-.mgr-stat-value {
-    display: block;
-    font-size: 1.375rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    line-height: 1.1;
+.mgr-overview-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+    padding: 0 1rem;
+    border-right: 1px solid var(--border-subtle);
 }
 
-.mgr-stat-label {
-    display: block;
-    margin-top: 0.25rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
+.mgr-overview-stat:first-child {
+    padding-left: 0;
+}
+
+.mgr-overview-stat:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+.mgr-overview-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--text-muted);
 }
 
+.mgr-overview-value {
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
 .mgr-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: none;
 }
 
 .mgr-nav-link {
@@ -465,10 +494,11 @@
 }
 
 .mgr-section {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 0;
+    overflow: visible;
 }
 
 .mgr-section-header {
@@ -476,16 +506,18 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.875rem 1.125rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--bg-body);
+    padding: 0.875rem 0 0.5rem;
+    border-bottom: none;
+    background: transparent;
 }
 
 .mgr-section-header h2 {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-primary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 .mgr-section-meta {
@@ -494,7 +526,7 @@
 }
 
 .mgr-section-body {
-    padding: 1rem 1.125rem 1.125rem;
+    padding: 0 0 0.5rem;
 }
 
 .mgr-muted {
@@ -513,13 +545,13 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.75rem;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    background: var(--bg-body);
+    padding: 0.75rem 0;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: 0;
+    background: transparent;
     color: var(--text-primary);
     text-decoration: none;
-    transition: border-color var(--transition);
 }
 
 .mgr-team-row:hover {

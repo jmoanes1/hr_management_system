@@ -11,25 +11,15 @@
 <div class="chat-page page-shell">
 
     <header class="chat-page-header">
-        <div class="chat-page-header-main">
-            <h1>Directory chat</h1>
-            <p class="chat-page-subtitle">Ask the assistant about employees, departments, and workforce data</p>
-        </div>
+        <h1>Directory chat</h1>
     </header>
 
     <div class="chat-panel">
-        <div class="chat-panel-top">
-            <div class="chat-panel-title">
-                <h2>Directory assistant</h2>
-                <p>Natural language search across your employee directory</p>
-            </div>
-        </div>
-
         <div class="chat-messages" id="chatMessages" data-room-id="{{ assistant_room.pk }}">
             {% if not messages_list %}
             <div class="chat-welcome" id="chatWelcome">
-                <h3>How can I help?</h3>
-                <p>Try a question about teams, roles, headcount, or who reports to whom.</p>
+                <h2>How can I help?</h2>
+                <p>Ask about teams, roles, headcount, or reporting lines.</p>
                 <div class="chat-suggestions">
                     <button type="button" class="chat-suggestion" data-query="active employees">Active employees</button>
                     <button type="button" class="chat-suggestion" data-query="employees in engineering">Engineering team</button>

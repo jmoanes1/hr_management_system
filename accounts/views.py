@@ -50,7 +50,8 @@ def login_view(request):
         if user.must_change_password:
             messages.warning(request, "You must change your temporary password before continuing.")
             return redirect("accounts:force_password_change")
-        messages.success(request, f"Welcome back, {user.get_full_name() or user.username}!")
+        display_name = user.get_full_name().strip() or user.username
+        messages.success(request, f"Signed in as {display_name}.")
         next_url = request.GET.get("next", "dashboard:home")
         return redirect(next_url)
 

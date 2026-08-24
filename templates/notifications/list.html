@@ -13,13 +13,12 @@
     <header class="sys-page-header">
         <div class="sys-page-header-main">
             <h1>Notifications</h1>
-            <p class="sys-page-subtitle">{{ unread_count }} unread notification{{ unread_count|pluralize }}</p>
         </div>
         {% if unread_count %}
         <div class="sys-page-header-actions">
             <form action="{% url 'notifications:mark_all_read' %}" method="post">
                 {% csrf_token %}
-                <button type="submit" class="btn btn-outline btn-sm">Mark all read</button>
+                <button type="submit" class="ui-text-link">Mark all read</button>
             </form>
         </div>
         {% endif %}

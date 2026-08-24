@@ -34,7 +34,7 @@
                     {% if application.candidate.linkedin_url %}<div><dt>LinkedIn</dt><dd><a href="{{ application.candidate.linkedin_url }}" target="_blank" rel="noopener">Profile</a></dd></div>{% endif %}
                     <div><dt>Applied</dt><dd>{{ application.applied_at|date:"M d, Y H:i" }}</dd></div>
                     {% if application.candidate.resume %}
-                    <div><dt>Resume</dt><dd><a href="{% url 'recruitment:resume_download' application.candidate.pk %}" class="btn btn-sm btn-outline">Download</a></dd></div>
+                    <div><dt>Resume</dt><dd><a href="{% url 'recruitment:resume_download' application.candidate.pk %}" class="ui-text-link">Download</a></dd></div>
                     {% endif %}
                 </dl>
             </div>
@@ -134,7 +134,7 @@
                         {{ task_form.title }}
                     </div>
                     <div class="form-actions form-group-full">
-                        <button type="submit" class="btn btn-outline btn-sm">Add task</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Add task</button>
                     </div>
                 </form>
             </div>

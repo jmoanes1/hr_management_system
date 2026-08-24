@@ -4,6 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 
 from accounts.forms import StyledFormMixin
+from departments.models import Department
 from employees.models import CompanyAnnouncement, Employee
 from positions.models import Position
 
@@ -46,8 +47,25 @@ class EmployeeForm(StyledFormMixin, forms.ModelForm):
             "date_of_birth": forms.DateInput(attrs={"type": "date"}),
             "date_hired": forms.DateInput(attrs={"type": "date"}),
             "address": forms.Textarea(attrs={"rows": 3}),
-            "bio": forms.Textarea(attrs={"rows": 4}),
+            "bio": forms.Textarea(attrs={"rows": 3}),
             "profile_photo": forms.FileInput(attrs={"accept": "image/*"}),
+        }
+        labels = {
+            "phone_number": "Phone",
+            "date_of_birth": "Birthdate",
+            "profile_photo": "Photo",
+            "date_hired": "Hired",
+            "employment_status": "Status",
+            "employee_type": "Type",
+            "work_location": "Location",
+            "availability_status": "Availability",
+            "emergency_contact_name": "Emergency name",
+            "emergency_contact_phone": "Emergency phone",
+            "emergency_contact_relationship": "Relationship",
+            "linkedin_url": "LinkedIn",
+            "github_url": "GitHub",
+            "twitter_url": "Twitter",
+            "website_url": "Website",
         }
 
     def __init__(self, *args, **kwargs):
@@ -58,6 +76,11 @@ class EmployeeForm(StyledFormMixin, forms.ModelForm):
                 self.fields[field_name].widget.attrs["placeholder"] = placeholder
 
         self.fields["manager"].queryset = Employee.objects.filter(is_active=True).order_by("last_name")
+        self.fields["manager"].empty_label = "No manager"
+        department_qs = Department.objects.filter(is_active=True)
+        if self.instance and self.instance.department_id:
+            department_qs = department_qs | Department.objects.filter(pk=self.instance.department_id)
+        self.fields["department"].queryset = department_qs.order_by("name")
         if self.instance and self.instance.pk:
             self.fields["manager"].queryset = self.fields["manager"].queryset.exclude(pk=self.instance.pk)
 

@@ -8,60 +8,65 @@
 {% endblock %}
 
 {% block content %}
-<div class="perf-page page-shell">
+<div class="perf-page page-shell perf-detail-page">
 
-    <nav class="perf-breadcrumb">
+    <nav class="perf-breadcrumb" aria-label="Breadcrumb">
         <a href="{% url 'performance:dashboard' %}">Performance</a>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
         <span>{{ review.review_period }}</span>
     </nav>
 
     <header class="perf-page-header">
         <div class="perf-page-header-main">
             <h1>{{ review.employee.full_name }}</h1>
-            <p class="perf-page-subtitle">{{ review.review_period }} · {{ review.period_start|date:"M d" }} – {{ review.period_end|date:"M d, Y" }}</p>
+            <p class="perf-page-subtitle">{{ review.review_period }} · {{ review.period_start|date:"M j" }} – {{ review.period_end|date:"M j, Y" }}</p>
         </div>
         <div class="perf-review-header-meta">
             <span class="perf-rating">{{ review.overall_rating }}/5</span>
-            <span class="badge badge-outline">{{ review.get_status_display }}</span>
+            <span class="perf-status">{{ review.get_status_display }}</span>
         </div>
     </header>
 
-    <div class="perf-detail-panels">
+    <div class="perf-detail">
         {% if review.strengths %}
-        <section class="perf-section">
-            <div class="perf-section-header"><h2>Strengths</h2></div>
-            <div class="perf-section-body" style="padding:1rem 1.125rem">{{ review.strengths|linebreaksbr }}</div>
+        <section class="perf-detail-block">
+            <h2>Strengths</h2>
+            <p>{{ review.strengths|linebreaksbr }}</p>
         </section>
         {% endif %}
+
         {% if review.areas_for_improvement %}
-        <section class="perf-section">
-            <div class="perf-section-header"><h2>Areas for improvement</h2></div>
-            <div class="perf-section-body" style="padding:1rem 1.125rem">{{ review.areas_for_improvement|linebreaksbr }}</div>
+        <section class="perf-detail-block">
+            <h2>Areas for improvement</h2>
+            <p>{{ review.areas_for_improvement|linebreaksbr }}</p>
         </section>
         {% endif %}
+
         {% if review.goals_summary %}
-        <section class="perf-section perf-section--full">
-            <div class="perf-section-header"><h2>Goals summary</h2></div>
-            <div class="perf-section-body" style="padding:1rem 1.125rem">{{ review.goals_summary|linebreaksbr }}</div>
+        <section class="perf-detail-block perf-detail-block--full">
+            <h2>Goals summary</h2>
+            <p>{{ review.goals_summary|linebreaksbr }}</p>
         </section>
         {% endif %}
+
         {% if review.manager_feedback %}
-        <section class="perf-section perf-section--full">
-            <div class="perf-section-header"><h2>Manager feedback</h2></div>
-            <div class="perf-section-body" style="padding:1rem 1.125rem">{{ review.manager_feedback|linebreaksbr }}</div>
+        <section class="perf-detail-block perf-detail-block--full">
+            <h2>Manager feedback</h2>
+            <p>{{ review.manager_feedback|linebreaksbr }}</p>
         </section>
         {% endif %}
-        <section class="perf-section">
-            <div class="perf-section-header"><h2>Details</h2></div>
-            <div class="perf-section-body" style="padding:1rem 1.125rem">
-                <dl class="perf-detail-list">
-                    <div><dt>Reviewer</dt><dd>{{ review.reviewer.get_full_name|default:review.reviewer.username|default:"—" }}</dd></div>
-                    <div><dt>Created</dt><dd>{{ review.created_at|date:"M d, Y" }}</dd></div>
-                </dl>
-            </div>
-        </section>
     </div>
+
+    <dl class="perf-detail-meta">
+        <div>
+            <dt>Reviewer</dt>
+            <dd>{{ review.reviewer.get_full_name|default:review.reviewer.username|default:"—" }}</dd>
+        </div>
+        <div>
+            <dt>Created</dt>
+            <dd>{{ review.created_at|date:"M j, Y" }}</dd>
+        </div>
+    </dl>
 
 </div>
 {% endblock %}

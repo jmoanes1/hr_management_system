@@ -8,11 +8,11 @@
     const svg = document.getElementById('orgChartSvg');
     if (!svg) return;
 
-    const NODE_W = 176;
-    const NODE_H = 72;
-    const GAP_X = 24;
-    const GAP_Y = 72;
-    const PAD = 32;
+    const NODE_W = 168;
+    const NODE_H = 56;
+    const GAP_X = 20;
+    const GAP_Y = 52;
+    const PAD = 24;
 
     function cssVar(name, fallback) {
         const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -28,7 +28,7 @@
             text: cssVar('--text-primary', '#1f2937'),
             textMuted: cssVar('--text-muted', '#9ca3af'),
             textSecondary: cssVar('--text-secondary', '#6b7280'),
-            line: cssVar('--border-color', '#d1d5db'),
+            line: cssVar('--border-subtle', '#e5e7eb'),
         };
     }
 
@@ -114,7 +114,7 @@
                 );
                 path.setAttribute('fill', 'none');
                 path.setAttribute('stroke', colors.line);
-                path.setAttribute('stroke-width', '1.5');
+                path.setAttribute('stroke-width', '1');
                 path.setAttribute('stroke-linecap', 'round');
                 path.setAttribute('stroke-linejoin', 'round');
                 svg.appendChild(path);
@@ -124,14 +124,25 @@
         nodes.forEach((node) => {
             const x = node._x * (NODE_W + GAP_X) + PAD;
             const y = node._y * (NODE_H + GAP_Y) + PAD;
-            const isManager = (node.children || []).length > 0;
+            const reports = (node.children || []).length;
+            const isManager = reports > 0;
 
             const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
             g.setAttribute('class', 'org-node');
             g.setAttribute('transform', `translate(${x},${y})`);
+            g.setAttribute('tabindex', '0');
+            g.setAttribute('role', 'link');
+            g.setAttribute('aria-label', node.name);
             g.style.cursor = 'pointer';
-            g.addEventListener('click', () => {
+            const openProfile = () => {
                 window.location.href = `/employees/${node.id}/`;
+            };
+            g.addEventListener('click', openProfile);
+            g.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    openProfile();
+                }
             });
 
             const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -140,61 +151,57 @@
             bg.setAttribute('height', NODE_H);
             bg.setAttribute('rx', '10');
             bg.setAttribute('fill', colors.surface);
-            bg.setAttribute('stroke', isManager ? colors.primary : colors.border);
-            bg.setAttribute('stroke-width', isManager ? '1.5' : '1');
+            bg.setAttribute('stroke', colors.border);
+            bg.setAttribute('stroke-width', '1');
             g.appendChild(bg);
-
-            if (isManager) {
-                const accent = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                accent.setAttribute('width', NODE_W);
-                accent.setAttribute('height', '3');
-                accent.setAttribute('rx', '10');
-                accent.setAttribute('fill', colors.primary);
-                g.appendChild(accent);
-            }
 
             const initialsBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
             initialsBg.setAttribute('cx', '22');
-            initialsBg.setAttribute('cy', NODE_H / 2 + (isManager ? 1 : 0));
-            initialsBg.setAttribute('r', '14');
-            initialsBg.setAttribute('fill', isManager ? colors.primaryLight : colors.border);
-            initialsBg.setAttribute('opacity', isManager ? '1' : '0.35');
+            initialsBg.setAttribute('cy', NODE_H / 2);
+            initialsBg.setAttribute('r', '13');
+            initialsBg.setAttribute('fill', 'transparent');
+            initialsBg.setAttribute('stroke', colors.border);
+            initialsBg.setAttribute('stroke-width', '1');
             g.appendChild(initialsBg);
 
             const initials = document.createElementNS('http://www.w3.org/2000/svg', 'text');
             initials.setAttribute('x', '22');
-            initials.setAttribute('y', NODE_H / 2 + (isManager ? 5 : 4));
+            initials.setAttribute('y', NODE_H / 2 + 4);
             initials.setAttribute('text-anchor', 'middle');
-            initials.setAttribute('fill', isManager ? colors.primary : colors.textSecondary);
+            initials.setAttribute('fill', colors.textSecondary);
             initials.setAttribute('font-size', '10');
             initials.setAttribute('font-weight', '600');
             initials.textContent = truncate(node.initials || node.name.slice(0, 2), 2);
             g.appendChild(initials);
 
             const name = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            name.setAttribute('x', '44');
-            name.setAttribute('y', '28');
+            name.setAttribute('x', '42');
+            name.setAttribute('y', '24');
             name.setAttribute('fill', colors.text);
             name.setAttribute('font-size', '12');
             name.setAttribute('font-weight', '600');
-            name.textContent = truncate(node.name, 18);
+            name.textContent = truncate(node.name, isManager ? 14 : 18);
             g.appendChild(name);
 
-            const posText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            posText.setAttribute('x', '44');
-            posText.setAttribute('y', '44');
-            posText.setAttribute('fill', colors.textSecondary);
-            posText.setAttribute('font-size', '10');
-            posText.textContent = truncate(node.position, 22);
-            g.appendChild(posText);
+            const meta = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            meta.setAttribute('x', '42');
+            meta.setAttribute('y', '40');
+            meta.setAttribute('fill', colors.textMuted);
+            meta.setAttribute('font-size', '10');
+            meta.textContent = truncate(node.position || node.department, 22);
+            g.appendChild(meta);
 
-            const dept = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            dept.setAttribute('x', '44');
-            dept.setAttribute('y', '58');
-            dept.setAttribute('fill', colors.textMuted);
-            dept.setAttribute('font-size', '9');
-            dept.textContent = truncate(node.department, 24);
-            g.appendChild(dept);
+            if (isManager) {
+                const count = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                count.setAttribute('x', NODE_W - 12);
+                count.setAttribute('y', '24');
+                count.setAttribute('text-anchor', 'end');
+                count.setAttribute('fill', colors.textMuted);
+                count.setAttribute('font-size', '10');
+                count.setAttribute('font-weight', '600');
+                count.textContent = String(reports);
+                g.appendChild(count);
+            }
 
             svg.appendChild(g);
         });

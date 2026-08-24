@@ -118,16 +118,14 @@
     }
 
     function emptyStateHtml() {
-        if (window.renderEmptyState) {
-            return window.renderEmptyState({
-                icon: '◎',
-                title: 'No employees found',
-                message: 'Try a different search or clear your filters to see everyone.',
-                secondaryUrl: '#',
-                secondaryLabel: 'Clear filters',
-            });
-        }
-        return '<p class="text-muted">No employees found. Try adjusting your filters.</p>';
+        return `
+            <div class="empty-state compact-empty">
+                <h3>No employees found</h3>
+                <p>Try a different search or clear your filters.</p>
+                <div class="empty-state-actions">
+                    <a href="#" class="btn-link">Clear filters</a>
+                </div>
+            </div>`;
     }
 
     function bindEmptyStateActions(container) {
@@ -139,10 +137,6 @@
                 });
             }
         });
-    }
-
-    function deptInitials(name) {
-        return escapeHtml((name || 'CO').slice(0, 2).toUpperCase());
     }
 
     function groupByLetter(employees) {
@@ -162,44 +156,27 @@
         return `<div class="avatar ${sizeClass}">${escapeHtml(emp.initials)}</div>`;
     }
 
-    function renderCard(emp) {
+    function renderPerson(emp) {
         const photo = renderAvatar(emp, 'avatar-md');
-
-        const phoneAction = emp.phone
-            ? `<a href="tel:${escapeHtml(emp.phone)}" class="dir-emp-action dir-emp-action--call" title="Call"><span class="dir-emp-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span>Call</a>`
-            : `<span class="dir-emp-action dir-emp-action--call is-disabled"><span class="dir-emp-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></span>Call</span>`;
-
-        const emailAction = emp.email
-            ? `<a href="mailto:${escapeHtml(emp.email)}" class="dir-emp-action dir-emp-action--email" title="Email"><span class="dir-emp-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg></span>Email</a>`
-            : `<span class="dir-emp-action dir-emp-action--email is-disabled"><span class="dir-emp-action-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg></span>Email</span>`;
-
-        const linkedinAction = emp.linkedin_url
-            ? `<a href="${escapeHtml(emp.linkedin_url)}" class="dir-emp-action dir-emp-action--linkedin" target="_blank" rel="noopener noreferrer" title="LinkedIn"><span class="dir-emp-action-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 114.127 0 2.063 2.063 0 01-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>LinkedIn</a>`
-            : `<span class="dir-emp-action dir-emp-action--linkedin is-disabled"><span class="dir-emp-action-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 114.127 0 2.063 2.063 0 01-2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>LinkedIn</span>`;
+        const role = [emp.position, emp.department].filter(Boolean).join(' · ') || '—';
+        const email = emp.email
+            ? `<a href="mailto:${escapeHtml(emp.email)}" class="dir-person-email" title="Email ${escapeHtml(emp.full_name)}">${escapeHtml(emp.email)}</a>`
+            : '';
+        const statusCode = escapeHtml(emp.status_code || 'inactive');
+        const status = escapeHtml(emp.status || 'Unknown');
 
         return `
-            <article class="dir-emp-card">
-                <a href="${escapeHtml(emp.detail_url)}" class="dir-emp-card-link-overlay" tabindex="-1" aria-hidden="true"></a>
-                <div class="dir-emp-card-top">
-                    ${photo}
-                    <div class="dir-emp-card-info">
-                        <h3><a href="${escapeHtml(emp.detail_url)}" class="dir-emp-card-name">${escapeHtml(emp.full_name)}</a></h3>
-                        <p class="dir-emp-card-role">${escapeHtml(emp.position)} of ${escapeHtml(emp.department)}</p>
-                    </div>
-                    <div class="dir-emp-card-company">
-                        <span class="dir-emp-card-company-icon" aria-hidden="true">${deptInitials(emp.department)}</span>
-                        <span class="dir-emp-card-company-name">${escapeHtml((emp.department || '').toUpperCase())}</span>
-                    </div>
+            <article class="dir-person">
+                <a href="${escapeHtml(emp.detail_url)}" class="dir-person-hit" tabindex="-1" aria-hidden="true"></a>
+                ${photo}
+                <div class="dir-person-copy">
+                    <a href="${escapeHtml(emp.detail_url)}" class="dir-person-name">${escapeHtml(emp.full_name)}</a>
+                    <p class="dir-person-role">${escapeHtml(role)}</p>
                 </div>
-                <div class="dir-emp-card-bottom">
-                    <div class="dir-emp-actions">
-                        ${phoneAction}
-                        ${emailAction}
-                        ${linkedinAction}
-                    </div>
-                    <a href="${escapeHtml(emp.qr_url)}" class="dir-emp-qr" target="_blank" title="QR code">
-                        <img src="${escapeHtml(emp.qr_url)}" alt="" loading="lazy" width="44" height="44">
-                    </a>
+                <div class="dir-person-meta">
+                    <span class="dir-person-id">${escapeHtml(emp.employee_id || '')}</span>
+                    <span class="badge badge-${statusCode}">${status}</span>
+                    ${email}
                 </div>
             </article>`;
     }
@@ -209,7 +186,7 @@
             <section class="dir-alpha-group">
                 <span class="dir-alpha-letter" aria-hidden="true">${escapeHtml(group.letter)}</span>
                 <div class="dir-alpha-cards">
-                    ${group.items.map(renderCard).join('')}
+                    ${group.items.map(renderPerson).join('')}
                 </div>
             </section>
         `).join('');
@@ -228,8 +205,9 @@
                 <td>${escapeHtml(emp.employee_id)}</td>
                 <td>${escapeHtml(emp.department)}</td>
                 <td>${escapeHtml(emp.position)}</td>
-                <td><span class="badge badge-${escapeHtml(emp.status_code)}">${escapeHtml(emp.status)}</span></td>
+                <td><span class="badge badge-${escapeHtml(emp.status_code || '')}">${escapeHtml(emp.status)}</span></td>
                 <td>${escapeHtml(emp.email)}</td>
+                <td class="actions-cell"><a href="${escapeHtml(emp.detail_url)}" class="btn btn-outline btn-sm">View</a></td>
             </tr>`;
     }
 
@@ -309,7 +287,7 @@
                 return r.json();
             })
             .then(data => {
-                resultsCount.textContent = `${data.total_count} employee${data.total_count !== 1 ? 's' : ''} found`;
+                resultsCount.textContent = `${data.total_count} employee${data.total_count !== 1 ? 's' : ''}`;
 
                 if (currentView === 'card') {
                     if (data.employees.length) {
@@ -321,7 +299,7 @@
                 } else {
                     tableBody.innerHTML = data.employees.length
                         ? data.employees.map(renderTableRow).join('')
-                        : `<tr><td colspan="6">${emptyStateHtml()}</td></tr>`;
+                        : `<tr><td colspan="7">${emptyStateHtml()}</td></tr>`;
                     if (!data.employees.length) bindEmptyStateActions(tableBody);
                 }
 

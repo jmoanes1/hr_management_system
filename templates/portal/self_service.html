@@ -13,14 +13,10 @@
     <header class="ss-page-header">
         <div class="ss-page-header-main">
             <h1>Self-service</h1>
-            <p class="ss-page-subtitle">Manage your profile, documents, attendance, and leave</p>
         </div>
         {% if employee %}
-        <div class="ss-profile-meter" aria-label="Profile completion {{ profile_completion }} percent">
-            <span class="ss-profile-meter-label">Profile {{ profile_completion }}%</span>
-            <div class="profile-completion-bar">
-                <div class="profile-completion-fill" style="width:{{ profile_completion }}%"></div>
-            </div>
+        <div class="ss-page-header-actions">
+            <a href="{% url 'portal:profile' %}" class="btn btn-primary btn-sm">Edit profile</a>
         </div>
         {% endif %}
     </header>
@@ -34,25 +30,6 @@
         <a href="{% url 'employees:id_card' employee.pk %}" class="ss-nav-link">ID card</a>
         <a href="{% url 'employees:detail' employee.pk %}" class="ss-nav-link">Full profile</a>
     </nav>
-
-    <div class="ss-cards">
-        <a href="{% url 'portal:profile' %}" class="ss-card">
-            <strong>Personal info</strong>
-            <span>Contact, emergency details, and social links</span>
-        </a>
-        <a href="{% url 'portal:documents' %}" class="ss-card">
-            <strong>Documents</strong>
-            <span>{{ documents_count }} file{{ documents_count|pluralize }} · resume and certificates</span>
-        </a>
-        <a href="{% url 'attendance:dashboard' %}" class="ss-card">
-            <strong>Attendance</strong>
-            <span>{% if today_attendance and today_attendance.time_in_morning %}In progress today{% else %}Record today's attendance{% endif %}</span>
-        </a>
-        <a href="{% url 'attendance:leave_request' %}" class="ss-card">
-            <strong>Request leave</strong>
-            <span>Submit and track time-off requests</span>
-        </a>
-    </div>
 
     <div class="ss-panels">
         <section class="ss-section">
@@ -77,8 +54,8 @@
 
         <section class="ss-section">
             <div class="ss-section-header">
-                <h2>Recent leave requests</h2>
-                <a href="{% url 'attendance:leave_list' %}" class="btn btn-sm btn-outline">View all</a>
+                <h2>Recent leave</h2>
+                <a href="{% url 'attendance:leave_list' %}" class="ui-text-link">View all</a>
             </div>
             <div class="ss-section-body">
                 {% if recent_leaves %}
@@ -89,7 +66,7 @@
                             <span>{{ leave.leave_type.name }}</span>
                             <span class="ss-list-sub">{{ leave.start_date|date:"M d" }} – {{ leave.end_date|date:"M d" }} · {{ leave.total_days }} day{{ leave.total_days|pluralize }}</span>
                         </div>
-                        <span class="badge badge-{{ leave.status }}">{{ leave.get_status_display }}</span>
+                        <span class="ss-list-status">{{ leave.get_status_display }}</span>
                     </li>
                     {% endfor %}
                 </ul>

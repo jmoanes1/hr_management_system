@@ -8,38 +8,99 @@
 {% endblock %}
 
 {% block content %}
-<div class="perf-page page-shell perf-page-narrow">
+<div class="perf-page page-shell perf-form-page">
 
-    <nav class="perf-breadcrumb">
+    <nav class="perf-breadcrumb" aria-label="Breadcrumb">
         <a href="{% url 'performance:dashboard' %}">Performance</a>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
         <span>{{ title }}</span>
     </nav>
 
     <header class="perf-page-header">
         <div class="perf-page-header-main">
             <h1>{{ title }}</h1>
+            <p class="perf-page-subtitle">Record a review for an employee</p>
         </div>
     </header>
 
-    <section class="perf-section perf-form-section">
-        <div class="perf-section-body" style="padding:1.25rem">
-            <form method="post" class="form-grid" novalidate>
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="form-group {% if field.name in 'strengths,areas_for_improvement,goals_summary,manager_feedback' %}form-group-full{% endif %}">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
-                </div>
-                {% endfor %}
-                <div class="form-actions form-group-full">
-                    <button type="submit" class="btn btn-primary">Save review</button>
-                    <a href="{% url 'performance:dashboard' %}" class="btn btn-outline">Cancel</a>
-                </div>
-            </form>
+    <form method="post" class="perf-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <div class="perf-form-fields">
+            <div class="form-group">
+                <label for="{{ form.employee.id_for_label }}">{{ form.employee.label }} *</label>
+                {{ form.employee }}
+                {% if form.employee.errors %}<span class="form-error">{{ form.employee.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.review_period.id_for_label }}">{{ form.review_period.label }} *</label>
+                {{ form.review_period }}
+                {% if form.review_period.errors %}<span class="form-error">{{ form.review_period.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.period_start.id_for_label }}">{{ form.period_start.label }} *</label>
+                {{ form.period_start }}
+                {% if form.period_start.errors %}<span class="form-error">{{ form.period_start.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.period_end.id_for_label }}">{{ form.period_end.label }} *</label>
+                {{ form.period_end }}
+                {% if form.period_end.errors %}<span class="form-error">{{ form.period_end.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.overall_rating.id_for_label }}">{{ form.overall_rating.label }} *</label>
+                {{ form.overall_rating }}
+                <span class="form-help">1–5 scale</span>
+                {% if form.overall_rating.errors %}<span class="form-error">{{ form.overall_rating.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.status.id_for_label }}">{{ form.status.label }} *</label>
+                {{ form.status }}
+                {% if form.status.errors %}<span class="form-error">{{ form.status.errors.0 }}</span>{% endif %}
+            </div>
         </div>
-    </section>
+
+        <div class="perf-form-notes">
+            <h2 class="perf-form-notes-label">Notes</h2>
+
+            <div class="form-group">
+                <label for="{{ form.strengths.id_for_label }}">{{ form.strengths.label }}</label>
+                {{ form.strengths }}
+                {% if form.strengths.errors %}<span class="form-error">{{ form.strengths.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.areas_for_improvement.id_for_label }}">{{ form.areas_for_improvement.label }}</label>
+                {{ form.areas_for_improvement }}
+                {% if form.areas_for_improvement.errors %}<span class="form-error">{{ form.areas_for_improvement.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.goals_summary.id_for_label }}">{{ form.goals_summary.label }}</label>
+                {{ form.goals_summary }}
+                {% if form.goals_summary.errors %}<span class="form-error">{{ form.goals_summary.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.manager_feedback.id_for_label }}">{{ form.manager_feedback.label }}</label>
+                {{ form.manager_feedback }}
+                {% if form.manager_feedback.errors %}<span class="form-error">{{ form.manager_feedback.errors.0 }}</span>{% endif %}
+            </div>
+        </div>
+
+        <div class="perf-form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Save review</button>
+            <a href="{% url 'performance:dashboard' %}" class="perf-text-link">Cancel</a>
+        </div>
+    </form>
 
 </div>
 {% endblock %}

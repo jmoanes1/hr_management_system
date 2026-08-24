@@ -13,38 +13,37 @@
     <header class="perf-page-header">
         <div class="perf-page-header-main">
             <h1>Goals</h1>
-            <p class="perf-page-subtitle">Track KPIs and development targets</p>
         </div>
         <div class="perf-page-header-actions">
-            <a href="{% url 'performance:dashboard' %}" class="btn btn-outline btn-sm">Dashboard</a>
+            <a href="{% url 'performance:dashboard' %}" class="perf-text-link">Performance</a>
             <a href="{% url 'performance:goal_create' %}" class="btn btn-primary btn-sm">New goal</a>
         </div>
     </header>
 
     {% if goals %}
-    <div class="perf-grid">
+    <ul class="perf-list perf-list--page">
         {% for goal in goals %}
-        <article class="perf-goal-card">
-            <h3>{{ goal.title }}</h3>
-            <p class="perf-list-meta">
-                {{ goal.employee.full_name }}
-                {% if goal.target_date %} · Due {{ goal.target_date|date:"M d, Y" }}{% endif %}
-            </p>
-            {% if goal.description %}<p class="perf-list-meta">{{ goal.description|truncatewords:25 }}</p>{% endif %}
-            <div class="goal-progress-bar"><div class="goal-progress-fill" style="width:{{ goal.progress }}%"></div></div>
-            <div class="perf-goal-card-footer">
-                <span class="badge badge-outline">{{ goal.get_status_display }}</span>
-                <span class="perf-list-meta">{{ goal.progress }}%</span>
+        <li class="perf-list-item">
+            <div class="perf-list-main">
+                <span class="perf-list-title">{{ goal.title }}</span>
+                <span class="perf-list-meta">
+                    {{ goal.employee.full_name }}
+                    {% if goal.target_date %} · Due {{ goal.target_date|date:"M j, Y" }}{% endif %}
+                    · {{ goal.get_status_display }}
+                </span>
+                {% if goal.description %}
+                <p class="perf-list-desc">{{ goal.description|truncatewords:28 }}</p>
+                {% endif %}
+                <div class="goal-progress-bar" aria-hidden="true">
+                    <div class="goal-progress-fill" style="width:{{ goal.progress }}%"></div>
+                </div>
             </div>
-        </article>
+            <div class="perf-list-side">{{ goal.progress }}%</div>
+        </li>
         {% endfor %}
-    </div>
+    </ul>
     {% else %}
-    <div class="perf-empty" style="padding:3rem 1.5rem;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--border-radius-lg)">
-        <h3>No goals yet</h3>
-        <p>Create goals to track employee development.</p>
-        <a href="{% url 'performance:goal_create' %}" class="btn btn-primary btn-sm">Create goal</a>
-    </div>
+    <p class="perf-empty">No goals yet. <a href="{% url 'performance:goal_create' %}" class="perf-text-link">Create one</a></p>
     {% endif %}
 
 </div>

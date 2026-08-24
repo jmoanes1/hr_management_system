@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}Settings - Employee Directory{% endblock %}
+{% block page_section %}Admin{% endblock %}
+{% block page_heading %}Settings{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/settings.css' %}">
@@ -31,7 +33,6 @@
         </div>
         <div class="settings-page-header-actions">
             <a href="{% url 'accounts:profile' %}" class="btn btn-primary btn-sm">Edit profile</a>
-            <a href="{% url 'dashboard:home' %}" class="btn btn-outline btn-sm">Dashboard</a>
         </div>
     </header>
 
@@ -124,7 +125,7 @@
                             <span>Update your name, email, phone, and profile photo</span>
                         </div>
                         <div class="settings-row-action">
-                            <a href="{% url 'accounts:profile' %}" class="btn btn-outline btn-sm">Edit Profile</a>
+                            <a href="{% url 'accounts:profile' %}" class="ui-text-link">Edit</a>
                         </div>
                     </div>
                     <div class="settings-row">
@@ -133,7 +134,7 @@
                             <span>Change your login password for this account</span>
                         </div>
                         <div class="settings-row-action">
-                            <a href="{% url 'accounts:change_password' %}" class="btn btn-outline btn-sm">Change Password</a>
+                            <a href="{% url 'accounts:change_password' %}" class="ui-text-link">Change password</a>
                         </div>
                     </div>
                     {% if user.employee_profile %}
@@ -143,7 +144,7 @@
                             <span>View your directory profile — {{ user.employee_profile.full_name }}</span>
                         </div>
                         <div class="settings-row-action">
-                            <a href="{% url 'employees:detail' user.employee_profile.pk %}" class="btn btn-outline btn-sm">View Profile</a>
+                            <a href="{% url 'employees:detail' user.employee_profile.pk %}" class="ui-text-link">View profile</a>
                         </div>
                     </div>
                     {% endif %}

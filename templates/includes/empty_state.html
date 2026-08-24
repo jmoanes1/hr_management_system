@@ -1,12 +1,16 @@
-{# Usage: {% include "includes/empty_state.html" with icon="◎" title="No employees" message="Try adjusting filters." action_url=url action_label="Add employee" %} #}
+{# Usage: {% include "includes/empty_state.html" with title="No employees" message="Try adjusting filters." action_url=url action_label="Add employee" %} #}
 <div class="empty-state{% if compact %} compact-empty{% endif %}">
-    <div class="empty-state-icon">{{ icon|default:"📋" }}</div>
+    <div class="empty-state-icon" aria-hidden="true">
+        {% if icon %}{{ icon }}{% else %}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+        {% endif %}
+    </div>
     <h3>{{ title }}</h3>
     {% if message %}<p>{{ message }}</p>{% endif %}
     {% if action_url or secondary_url %}
     <div class="empty-state-actions">
-        {% if action_url %}<a href="{{ action_url }}" class="btn btn-primary">{{ action_label|default:"Get started" }}</a>{% endif %}
-        {% if secondary_url %}<a href="{{ secondary_url }}" class="btn btn-outline">{{ secondary_label }}</a>{% endif %}
+        {% if action_url %}<a href="{{ action_url }}" class="btn btn-primary btn-sm">{{ action_label|default:"Get started" }}</a>{% endif %}
+        {% if secondary_url %}<a href="{{ secondary_url }}" class="btn-link">{{ secondary_label }}</a>{% endif %}
     </div>
     {% endif %}
 </div>

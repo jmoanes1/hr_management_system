@@ -29,7 +29,7 @@ def position_create_view(request):
         messages.success(request, f"Position {position.title} created successfully.")
         return redirect("positions:list")
 
-    return render(request, "positions/form.html", {"form": form, "title": "Create Position"})
+    return render(request, "positions/form.html", {"form": form, "title": "Create position"})
 
 
 @position_manager_required
@@ -43,7 +43,7 @@ def position_edit_view(request, pk):
         return redirect("positions:list")
 
     return render(request, "positions/form.html", {
-        "form": form, "position": position, "title": "Edit Position",
+        "form": form, "position": position, "title": "Edit position",
     })
 
 

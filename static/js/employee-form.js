@@ -14,7 +14,7 @@
             .then((r) => r.json())
             .then((data) => {
                 const current = posSelect.value;
-                posSelect.innerHTML = '<option value="">---------</option>';
+                posSelect.innerHTML = '<option value="">Select position</option>';
                 data.positions.forEach((p) => {
                     const opt = document.createElement("option");
                     opt.value = p.id;

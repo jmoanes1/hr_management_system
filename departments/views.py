@@ -29,7 +29,7 @@ def department_create_view(request):
         messages.success(request, f"Department {department.name} created successfully.")
         return redirect("departments:list")
 
-    return render(request, "departments/form.html", {"form": form, "title": "Create Department"})
+    return render(request, "departments/form.html", {"form": form, "title": "Create department"})
 
 
 @department_manager_required
@@ -43,7 +43,7 @@ def department_edit_view(request, pk):
         return redirect("departments:list")
 
     return render(request, "departments/form.html", {
-        "form": form, "department": department, "title": "Edit Department",
+        "form": form, "department": department, "title": "Edit department",
     })
 
 

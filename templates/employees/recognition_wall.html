@@ -12,48 +12,44 @@
 
     <header class="rw-page-header">
         <div class="rw-page-header-main">
-            <h1>Recognition wall</h1>
-            <p class="rw-page-subtitle">Awards, kudos, and milestones across the organization</p>
-        </div>
-        <div class="rw-page-header-actions">
-            <a href="{% url 'employees:list' %}" class="btn btn-outline btn-sm">Employee directory</a>
+            <h1>Recognition</h1>
         </div>
     </header>
 
     {% if recognitions %}
-    <section class="rw-stats" aria-label="Recognition summary">
-        <article class="rw-stat">
-            <span class="rw-stat-value">{{ recognition_total }}</span>
-            <span class="rw-stat-label">Total awards</span>
-        </article>
-        <article class="rw-stat">
-            <span class="rw-stat-value">{{ recognition_employees }}</span>
-            <span class="rw-stat-label">Employees recognized</span>
-        </article>
-        <article class="rw-stat">
-            <span class="rw-stat-value">{{ recognition_recent }}</span>
-            <span class="rw-stat-label">This month</span>
-        </article>
+    <section class="rw-overview" aria-label="Recognition summary">
+        <div class="rw-overview-grid">
+            <div class="rw-overview-stat">
+                <span class="rw-overview-label">Awards</span>
+                <span class="rw-overview-value">{{ recognition_total }}</span>
+            </div>
+            <div class="rw-overview-stat">
+                <span class="rw-overview-label">People</span>
+                <span class="rw-overview-value">{{ recognition_employees }}</span>
+            </div>
+            <div class="rw-overview-stat">
+                <span class="rw-overview-label">This month</span>
+                <span class="rw-overview-value">{{ recognition_recent }}</span>
+            </div>
+        </div>
     </section>
 
-    <div class="rw-grid">
+    <div class="rw-list">
         {% for rec in recognitions %}
-        <article class="rw-card">
-            <div class="rw-card-top">
+        <article class="rw-row">
+            <div class="rw-row-copy">
                 <span class="rw-category">{{ rec.get_category_display }}</span>
-                <time class="rw-date" datetime="{{ rec.awarded_date|date:'Y-m-d' }}">{{ rec.awarded_date|date:"M d, Y" }}</time>
+                <h2 class="rw-row-title">{{ rec.title }}</h2>
+                {% if rec.description %}
+                <p class="rw-row-desc">{{ rec.description|truncatewords:28 }}</p>
+                {% endif %}
+                <p class="rw-row-meta">
+                    <a href="{% url 'employees:detail' rec.employee.pk %}">{{ rec.employee.full_name }}</a>
+                    {% if rec.employee.department %} · {{ rec.employee.department.name }}{% endif %}
+                    {% if rec.awarded_by %} · {{ rec.awarded_by.get_full_name|default:rec.awarded_by.username }}{% endif %}
+                </p>
             </div>
-            <h2 class="rw-card-title">{{ rec.title }}</h2>
-            {% if rec.description %}
-            <p class="rw-card-desc">{{ rec.description|truncatewords:36 }}</p>
-            {% endif %}
-            <div class="rw-card-footer">
-                <a href="{% url 'employees:detail' rec.employee.pk %}" class="rw-employee-link">{{ rec.employee.full_name }}</a>
-                <span class="rw-card-meta">
-                    {% if rec.employee.department %}{{ rec.employee.department.name }}{% endif %}
-                    {% if rec.awarded_by %} · Awarded by {{ rec.awarded_by.get_full_name|default:rec.awarded_by.username }}{% endif %}
-                </span>
-            </div>
+            <time class="rw-row-date" datetime="{{ rec.awarded_date|date:'Y-m-d' }}">{{ rec.awarded_date|date:"M d, Y" }}</time>
         </article>
         {% endfor %}
     </div>

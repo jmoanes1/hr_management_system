@@ -14,7 +14,7 @@
     --space-section: 1.5rem;
     --space-card: 1.25rem;
 
-    --topbar-height: 60px;
+    --topbar-height: 56px;
 }
 
 /* ===== Base typography & rhythm ===== */
@@ -73,16 +73,14 @@ a:hover {
     gap: var(--space-section);
 }
 
-/* Unified page titles — dashboard keeps its own heading scale in dashboard.css */
+/* Unified page titles — sentence case, no uppercase chrome */
 .page-header h1,
 .dept-page-header-main h1,
-.att-page-header-main h1,
-.emp-page-header-main h1,
 .page-intro-copy h1 {
-    font-size: 1.125rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    text-transform: none;
     color: var(--text-primary);
 }
 
@@ -95,120 +93,205 @@ a:hover {
     letter-spacing: 0.01em;
 }
 
-/* ===== Topbar — minimal bar ===== */
+/* ===== Topbar — quiet bar: search + icon cluster ===== */
 .topbar {
     height: var(--topbar-height);
-    padding: 0 1.5rem;
-    background: rgba(255, 255, 255, 0.9);
+    padding: 0 1.25rem 0 1.5rem;
+    gap: 0.75rem;
+    background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid var(--border-subtle);
+    box-shadow: none;
 }
 
 .topbar-search {
-    max-width: 380px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    max-width: 22rem;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
 }
 
-.topbar-search .search-input {
-    padding: 0.5rem 1rem 0.5rem 2.375rem;
+.topbar-search svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+}
+
+.topbar-search .search-input,
+.topbar .search-input {
+    padding: 0.375rem 0;
     font-size: 0.8125rem;
-    border-radius: 10px;
-    background: var(--bg-surface);
-    border-color: var(--border-subtle);
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+.topbar-search .search-input:focus,
+.topbar .search-input:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
 }
 
 .topbar-search::before {
-    font-size: 0.875rem;
-    opacity: 0.5;
+    content: none;
 }
 
 .topbar-actions {
-    gap: 0.375rem;
+    gap: 0;
+    margin-left: auto;
 }
 
-.menu-toggle,
-.theme-toggle,
-.notification-btn,
-.topbar-help-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: 1px solid var(--border-subtle);
+.topbar .menu-toggle {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
     background: transparent;
+    color: var(--text-secondary);
+    box-shadow: none;
+}
+
+.topbar .menu-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+.topbar .menu-toggle:hover {
+    background: var(--bg-sidebar-hover);
+    color: var(--text-primary);
+    border: none;
+}
+
+/* Icon cluster: notifications, birthdays, theme, account */
+.topbar-tools {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.topbar .topbar-icon-btn,
+.topbar .theme-toggle,
+.topbar .notification-btn,
+.topbar .topbar-birthday-btn,
+.topbar .user-menu-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    color: var(--text-secondary);
+    box-shadow: none;
+    cursor: pointer;
+    text-decoration: none;
+    flex-shrink: 0;
+    gap: 0;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.topbar .topbar-icon-btn svg,
+.topbar .theme-toggle svg,
+.topbar .notification-btn svg,
+.topbar .topbar-birthday-btn svg,
+.topbar .menu-toggle svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+    flex-shrink: 0;
+}
+
+.topbar .topbar-icon-btn:hover,
+.topbar .theme-toggle:hover,
+.topbar .notification-btn:hover,
+.topbar .topbar-birthday-btn:hover,
+.topbar .user-menu-btn:hover,
+.topbar .notification-btn[aria-expanded="true"],
+.topbar .user-menu-btn[aria-expanded="true"] {
+    background: var(--bg-sidebar-hover);
+    color: var(--text-primary);
+    border-color: transparent;
+}
+
+.topbar .topbar-icon-btn:focus-visible,
+.topbar .theme-toggle:focus-visible,
+.topbar .notification-btn:focus-visible,
+.topbar .user-menu-btn:focus-visible,
+.topbar .menu-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.topbar .notification-count {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    min-width: 15px;
+    height: 15px;
+    padding: 0 4px;
+    background: var(--color-primary);
+    color: #fff;
+    border: 2px solid var(--bg-body);
+    border-radius: 999px;
+    font-size: 0.5625rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.topbar .user-menu {
+    position: relative;
+    padding-left: 0;
+    margin-left: 0;
+    border-left: none;
+}
+
+.topbar .user-menu-btn .user-avatar {
+    width: 26px;
+    height: 26px;
+    font-size: 0.625rem;
 }
 
 .topbar-mobile-search {
     display: none;
-    align-items: center;
-    gap: 0.375rem;
-    padding: 0.4375rem 0.75rem;
-    border-radius: 10px;
-    border: 1px solid var(--border-subtle);
-    background: var(--bg-surface);
-    color: var(--text-secondary);
+}
+
+.topbar .topbar-birthday-btn .notification-count {
+    background: #d97706;
+}
+
+.notification-dropdown-header {
+    padding: 0.75rem 0.875rem;
+}
+
+.notification-dropdown-header strong {
     font-size: 0.8125rem;
-    font-weight: 500;
-    text-decoration: none;
-    transition: border-color var(--transition), color var(--transition);
-}
-
-.topbar-mobile-search svg {
-    width: 1rem;
-    height: 1rem;
-    flex-shrink: 0;
-}
-
-.topbar-mobile-search:hover {
-    color: var(--color-primary);
-    border-color: rgba(79, 70, 229, 0.35);
-}
-
-.notification-badge--birthday {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    text-decoration: none;
-    color: inherit;
-}
-
-.notification-badge--birthday svg {
-    width: 1rem;
-    height: 1rem;
-}
-
-.user-menu-btn {
-    border-radius: 10px;
-    border: 1px solid var(--border-subtle);
-    background: transparent;
-    padding: 0.25rem 0.625rem 0.25rem 0.25rem;
-    gap: 0.5rem;
-}
-
-.user-menu-btn .user-name {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-}
-
-.topbar-clock {
-    font-size: 0.75rem;
     font-weight: 600;
-    letter-spacing: 0.03em;
-    padding: 0.3125rem 0.5rem;
-    opacity: 0.9;
-    color: var(--color-accent);
+    letter-spacing: 0.01em;
 }
 
-.notification-count {
-    background: var(--color-primary);
-    color: #FFFFFF;
-}
-
-.notification-badge {
-    background: rgba(79, 70, 229, 0.1);
-    color: var(--color-primary);
-    box-shadow: none;
-    font-size: 0.6875rem;
+.notification-dropdown-footer {
+    font-size: 0.75rem;
+    padding: 0.625rem 0.875rem;
 }
 
 /* ===== Sidebar refinements ===== */
@@ -249,22 +332,58 @@ a:hover {
     padding: 0.75rem;
 }
 
+/* Secondary actions: text, not outline buttons */
+.ui-text-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    text-decoration: none;
+    cursor: pointer;
+    display: inline;
+}
+
+.ui-text-link:hover,
+.ui-text-link:focus-visible {
+    text-decoration: underline;
+    color: var(--color-primary-hover);
+}
+
+.ui-text-link.is-danger {
+    color: var(--color-danger);
+}
+
+.ui-text-link.is-muted {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Hide leftover decorative page badges */
+.page-header-badge {
+    display: none;
+}
+
 /* ===== Cards & panels ===== */
 .card {
-    border-radius: var(--border-radius-lg);
-    border: 1px solid var(--border-subtle);
-    box-shadow: var(--shadow-card);
-    overflow: hidden;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    box-shadow: none;
+    overflow: visible;
+    background: transparent;
 }
 
 .card-header {
-    padding: 1rem 1.25rem;
+    padding: 0.875rem 0 0.5rem;
     background: transparent;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: none;
 }
 
 .card-body {
-    padding: 1.25rem;
+    padding: 0 0 1.25rem;
 }
 
 .card-header h3 {
@@ -274,9 +393,9 @@ a:hover {
 }
 
 .page-intro-card {
-    border-radius: var(--border-radius-lg);
-    border-color: var(--border-subtle);
-    padding: 1.25rem 1.5rem;
+    border-radius: 0;
+    border: none;
+    padding: 0 0 1rem;
 }
 
 /* ===== Buttons ===== */
@@ -311,16 +430,20 @@ a:hover {
 }
 
 .filters-bar {
-    border-radius: var(--border-radius-lg);
-    border: 1px solid var(--border-subtle);
-    padding: 1rem 1.25rem;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    padding: 0 0 1rem;
+    background: transparent;
 }
 
 /* ===== Tables ===== */
 .data-table {
-    border-radius: var(--border-radius-lg);
-    border: 1px solid var(--border-subtle);
-    overflow: hidden;
+    border-radius: 0;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    overflow: visible;
+    background: transparent;
 }
 
 .data-table th {
@@ -374,11 +497,11 @@ a:hover {
 
 /* ===== Empty states ===== */
 .empty-state {
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    border: 1px dashed var(--border-color);
-    border-radius: var(--border-radius-lg);
-    background: #F9FAFB;
+    padding: 2rem 0;
+    text-align: left;
+    border: none;
+    border-radius: 0;
+    background: transparent;
 }
 
 .empty-state-icon {
@@ -425,84 +548,35 @@ a:hover {
     border-radius: 8px;
 }
 
-/* ===== Directory cards — cleaner white tiles ===== */
-.dir-emp-card {
-    border: 1px solid rgba(0, 0, 0, 0.06);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 6px 20px rgba(0, 0, 0, 0.06);
-    padding: 1.125rem 1.25rem;
-    cursor: pointer;
-}
-
+/* Directory card hover — page-specific chrome lives in employees.css */
 .dir-emp-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.08), 0 12px 28px rgba(15, 23, 42, 0.08);
+    transform: none;
 }
 
-.dir-emp-card:hover .dir-emp-card-name {
-    color: var(--color-primary);
-}
-
-.dir-stats-bar {
-    padding-bottom: 1.25rem;
-    margin-bottom: 1.5rem;
-}
-
-.dir-alpha-grid {
-    gap: 1.5rem;
-}
-
-.dir-alpha-cards {
-    gap: 1.125rem;
-}
-
-/* ===== Dashboard KPI ===== */
+/* ===== Dashboard — keep page-specific chrome in dashboard.css ===== */
 .dashboard-page {
-    --dash-bg-section: transparent;
-    --dash-card-bg: var(--bg-surface);
     --dash-card-border: var(--border-subtle);
-    --dash-shadow: var(--shadow-card);
-    --dash-shadow-hover: var(--shadow-md);
+    --dash-shadow: none;
 }
 
-.dash-overview-card {
-    border-color: var(--border-subtle);
-    box-shadow: var(--shadow-card);
-}
-
-.dash-chart-card,
-.dash-panel {
-    border-color: var(--border-subtle);
-    border-radius: var(--border-radius-lg);
-}
-
-.dash-section-title {
-    font-size: 0.6875rem;
-    letter-spacing: 0.1em;
-    margin-bottom: 0.25rem;
-}
-
-.dash-header-date {
-    color: var(--color-accent);
-    opacity: 0.9;
-}
-
-/* ===== Module grids (departments, etc.) ===== */
+/* ===== Module grids — no boxed chrome ===== */
 .dept-grid .card,
 .dept-card,
 .summary-card,
 .att-stat-card,
-.mgr-stat,
-.perf-stat {
+.mgr-stat {
     border-color: var(--border-subtle);
-    border-radius: var(--border-radius-lg);
-    background: var(--bg-surface);
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 /* ===== Auth ===== */
 .auth-card {
-    border-radius: var(--border-radius-xl);
-    border-color: var(--border-subtle);
-    box-shadow: var(--shadow-lg);
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
 }
 
 .auth-logo .app-logo {
@@ -540,7 +614,7 @@ a:hover {
     }
 
     .topbar {
-        padding: 0 1rem;
+        padding: 0 0.75rem 0 1rem;
     }
 
     .topbar-search {
@@ -549,12 +623,6 @@ a:hover {
 
     .topbar-mobile-search {
         display: inline-flex;
-        margin-left: auto;
-        margin-right: 0.5rem;
-    }
-
-    .user-menu-btn .user-name {
-        display: none;
     }
 }
 
@@ -622,12 +690,16 @@ a:hover {
     border-bottom-color: var(--border-subtle);
 }
 
+[data-theme="dark"] .topbar .notification-count {
+    border-color: #11151c;
+}
+
 [data-theme="dark"] .data-table tbody tr:nth-child(even) td {
     background: rgba(255, 255, 255, 0.02);
 }
 
 [data-theme="dark"] .empty-state {
-    background: rgba(255, 255, 255, 0.02);
+    background: transparent;
 }
 
 [data-theme="dark"] .app-logo-title {
@@ -639,14 +711,13 @@ a:hover {
 }
 
 [data-theme="dark"] .dir-emp-card {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-    box-shadow: var(--shadow-card);
+    background: var(--bg-surface);
+    border-color: var(--border-subtle);
+    box-shadow: none;
 }
 
-[data-theme="dark"] .dir-emp-card-info h3,
-[data-theme="dark"] .dir-emp-card-company-name {
-    color: var(--text-on-card);
+[data-theme="dark"] .dir-emp-card-info h3 {
+    color: var(--text-primary);
 }
 
 [data-theme="dark"] .dir-emp-card-role,

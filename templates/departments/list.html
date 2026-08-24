@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}Departments - Employee Directory{% endblock %}
+{% block page_section %}Organization{% endblock %}
+{% block page_heading %}Departments{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/departments.css' %}">
@@ -13,7 +15,6 @@
     <header class="dept-page-header">
         <div class="dept-page-header-main">
             <h1>Departments</h1>
-            <p class="dept-page-subtitle">Organize teams and reporting structure</p>
         </div>
         {% if can_manage %}
         <div class="dept-page-header-actions">
@@ -23,51 +24,20 @@
     </header>
 
     {% if departments %}
-    <div class="dept-grid">
+    <div class="dept-list">
         {% for dept in departments %}
-        <article class="dept-card">
-            <div class="dept-card-header">
+        <article class="dept-row">
+            <div class="dept-row-copy">
                 <h3>{{ dept.name }}</h3>
-                {% if dept.is_active %}
-                <span class="badge badge-active">Active</span>
-                {% else %}
-                <span class="badge badge-inactive">Inactive</span>
-                {% endif %}
+                <p class="dept-row-meta">
+                    {% if dept.code %}{{ dept.code }} · {% endif %}{{ dept.employee_count }} employee{{ dept.employee_count|pluralize }}{% if dept.head %} · {{ dept.head.full_name }}{% endif %}
+                </p>
             </div>
-
-            {% if dept.description %}
-            <p class="dept-card-desc">{{ dept.description|truncatewords:24 }}</p>
-            {% else %}
-            <p class="dept-card-desc dept-card-desc--empty">No description</p>
-            {% endif %}
-
-            <dl class="dept-card-details">
-                <div>
-                    <dt>Code</dt>
-                    <dd>{{ dept.code|default:"—" }}</dd>
-                </div>
-                <div>
-                    <dt>Employees</dt>
-                    <dd>{{ dept.employee_count }}</dd>
-                </div>
-                <div class="dept-card-details-wide">
-                    <dt>Department head</dt>
-                    <dd>
-                        {% if dept.head %}
-                        <a href="{% url 'employees:detail' dept.head.pk %}">{{ dept.head.full_name }}</a>
-                        {% else %}
-                        —
-                        {% endif %}
-                    </dd>
-                </div>
-            </dl>
-
+            <span class="dept-row-status badge {% if dept.is_active %}badge-active{% else %}badge-inactive{% endif %}">{% if dept.is_active %}Active{% else %}Inactive{% endif %}</span>
             {% if can_manage %}
-            <div class="dept-card-actions">
-                <a href="{% url 'departments:edit' dept.pk %}" class="btn btn-sm btn-outline">Edit</a>
-                <button type="button" class="btn btn-sm btn-outline btn-icon-danger dept-delete-btn" data-modal="delete" data-url="{% url 'departments:delete' dept.pk %}" data-name="{{ dept.name }}" title="Delete department" aria-label="Delete {{ dept.name }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/></svg>
-                </button>
+            <div class="dept-row-actions">
+                <a href="{% url 'departments:edit' dept.pk %}" class="ui-text-link">Edit</a>
+                <button type="button" class="ui-text-link is-danger" data-modal="delete" data-url="{% url 'departments:delete' dept.pk %}" data-name="{{ dept.name }}">Delete</button>
             </div>
             {% endif %}
         </article>

@@ -171,11 +171,11 @@ body {
     background: var(--color-primary-light);
 }
 
-/* ===== Cards & panels (dark elevated) ===== */
+/* ===== Cards & panels — flat, no lift ===== */
 .card {
-    background: var(--bg-surface);
-    border-color: var(--border-color);
-    box-shadow: var(--shadow-card);
+    background: transparent;
+    border-color: var(--border-subtle);
+    box-shadow: none;
 }
 
 .card-header {
@@ -493,21 +493,21 @@ body {
     gap: 1rem;
 }
 
-/* White employee directory card */
+/* Legacy directory cards — keep flat if any remain */
 .dir-emp-card {
-    background: var(--bg-card);
-    border-radius: var(--border-radius-xl);
-    padding: 1rem 1.125rem;
-    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
+    background: transparent;
+    border-radius: 0;
+    padding: 0.75rem 0;
+    box-shadow: none;
     display: flex;
     flex-direction: column;
     gap: 0.875rem;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: none;
 }
 
 .dir-emp-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+    transform: none;
+    box-shadow: none;
 }
 
 .dir-emp-card-top {

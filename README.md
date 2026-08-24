@@ -54,6 +54,7 @@ python manage.py seed_phase2
 This creates:
 - **Super Admin:** `admin` / `Admin@12345`
 - **HR Manager:** `hr_manager` / `Hr@12345`
+-**Employee:** `jmoanes1` / `Makati#2026`
 - Sample departments, positions, and employees
 - Skills, leave types, timeline events, recognition awards
 - Job openings, hiring pipeline candidates, performance reviews & goals

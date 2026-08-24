@@ -59,8 +59,8 @@
                 </div>
                 {% for field in form.hidden_fields %}{{ field }}{% endfor %}
                 <div class="form-actions form-group-full">
-                    <button type="submit" class="btn btn-primary">Submit application</button>
-                    <a href="{% url 'recruitment:job_detail' job.pk %}" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary btn-sm">Submit application</button>
+                    <a href="{% url 'recruitment:job_detail' job.pk %}" class="ui-text-link">Cancel</a>
                 </div>
             </form>
         </div>

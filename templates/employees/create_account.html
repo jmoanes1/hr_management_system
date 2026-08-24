@@ -12,9 +12,8 @@
 </nav>
 
 <div class="page-header">
-    <span class="page-header-badge">🔐 Login</span>
-    <h1>Create Employee Account</h1>
-    <p class="text-muted">Set up portal access for an existing employee record</p>
+    <h1>Create employee account</h1>
+    <p class="text-muted">{{ employee.full_name }} · {{ employee.employee_id }}</p>
 </div>
 
 <div class="card form-page">
@@ -45,7 +44,7 @@
             {% endfor %}
             <div class="form-actions form-group-full">
                 <button type="submit" class="btn btn-primary">Create Account</button>
-                <a href="{% url 'employees:detail' employee.pk %}" class="btn btn-outline">Cancel</a>
+                <a href="{% url 'employees:detail' employee.pk %}" class="ui-text-link">Cancel</a>
             </div>
         </form>
     </div>

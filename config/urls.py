@@ -17,6 +17,7 @@ urlpatterns = [
     path("notifications/", include("notifications.urls")),
     path("portal/", include("portal.urls")),
     path("performance/", include("performance.urls")),
+    path("recruitment/", include("recruitment.urls")),
     path(
         "calendar/",
         include(("company_calendar.urls", "company_calendar")),

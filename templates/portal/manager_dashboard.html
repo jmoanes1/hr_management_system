@@ -12,54 +12,43 @@
 
     <header class="mgr-page-header">
         <div class="mgr-page-header-main">
-            <h1>Manager dashboard</h1>
-            <p class="mgr-page-subtitle">
-                {% if is_hr_view %}Organization overview{% else %}Your team at a glance{% endif %}
-            </p>
+            <h1>Manager</h1>
         </div>
         <div class="mgr-page-header-actions">
-            <a href="{% url 'employees:org_chart' %}" class="btn btn-outline btn-sm">Org chart</a>
-            <a href="{% url 'attendance:leave_list' %}" class="btn btn-outline btn-sm">Review leave</a>
+            <a href="{% url 'employees:org_chart' %}" class="ui-text-link">Org chart</a>
+            <a href="{% url 'attendance:leave_list' %}" class="ui-text-link">Review leave</a>
             {% if user.can_manage_employees %}
-            <a href="{% url 'attendance:report' %}" class="btn btn-outline btn-sm">Attendance reports</a>
+            <a href="{% url 'attendance:report' %}" class="ui-text-link">Reports</a>
             {% endif %}
         </div>
     </header>
 
-    <section class="mgr-stats" aria-label="Team summary">
-        <article class="mgr-stat">
-            <span class="mgr-stat-value">{{ team_size }}</span>
-            <span class="mgr-stat-label">{% if is_hr_view %}Active employees{% else %}Team members{% endif %}</span>
-        </article>
-        <article class="mgr-stat">
-            <span class="mgr-stat-value">{{ present_today }}</span>
-            <span class="mgr-stat-label">Present today</span>
-        </article>
-        <article class="mgr-stat">
-            <span class="mgr-stat-value">{{ on_leave|length }}</span>
-            <span class="mgr-stat-label">On leave</span>
-        </article>
-        <article class="mgr-stat">
-            <span class="mgr-stat-value">{{ pending_leaves|length }}</span>
-            <span class="mgr-stat-label">Pending approvals</span>
-        </article>
+    <section class="mgr-overview" aria-label="Team summary">
+        <div class="mgr-overview-grid">
+            <div class="mgr-overview-stat">
+                <span class="mgr-overview-label">{% if is_hr_view %}Employees{% else %}Team{% endif %}</span>
+                <span class="mgr-overview-value">{{ team_size }}</span>
+            </div>
+            <div class="mgr-overview-stat">
+                <span class="mgr-overview-label">Present today</span>
+                <span class="mgr-overview-value">{{ present_today }}</span>
+            </div>
+            <div class="mgr-overview-stat">
+                <span class="mgr-overview-label">On leave</span>
+                <span class="mgr-overview-value">{{ on_leave|length }}</span>
+            </div>
+            <div class="mgr-overview-stat">
+                <span class="mgr-overview-label">Pending</span>
+                <span class="mgr-overview-value">{{ pending_leaves|length }}</span>
+            </div>
+        </div>
     </section>
-
-    <nav class="mgr-nav" aria-label="Manager shortcuts">
-        <a href="{% url 'employees:list' %}" class="mgr-nav-link">Employee directory</a>
-        <a href="{% url 'employees:org_chart' %}" class="mgr-nav-link">Org chart</a>
-        <a href="{% url 'attendance:leave_list' %}" class="mgr-nav-link">Leave requests</a>
-        <a href="{% url 'attendance:dashboard' %}" class="mgr-nav-link">Attendance</a>
-        {% if user.can_manage_employees %}
-        <a href="{% url 'attendance:report' %}" class="mgr-nav-link">Reports</a>
-        {% endif %}
-    </nav>
 
     <div class="mgr-panels">
         <section class="mgr-section">
             <div class="mgr-section-header">
                 <h2>{% if is_hr_view %}Active employees{% else %}Direct reports{% endif %}</h2>
-                <span class="mgr-section-meta">{{ direct_reports|length }} shown</span>
+                <span class="mgr-section-meta">{{ direct_reports|length }}</span>
             </div>
             <div class="mgr-section-body">
                 {% if direct_reports %}
@@ -89,8 +78,8 @@
 
         <section class="mgr-section">
             <div class="mgr-section-header">
-                <h2>Pending leave requests</h2>
-                <a href="{% url 'attendance:leave_list' %}" class="btn btn-sm btn-outline">View all</a>
+                <h2>Pending leave</h2>
+                <a href="{% url 'attendance:leave_list' %}" class="ui-text-link">View all</a>
             </div>
             <div class="mgr-section-body">
                 {% if pending_leaves %}
@@ -116,7 +105,7 @@
     <section class="mgr-section">
         <div class="mgr-section-header">
             <h2>On leave today</h2>
-            <span class="mgr-section-meta">{{ on_leave|length }} employee{{ on_leave|length|pluralize }}</span>
+            <span class="mgr-section-meta">{{ on_leave|length }}</span>
         </div>
         <div class="mgr-section-body">
             <ul class="mgr-list mgr-list-compact">

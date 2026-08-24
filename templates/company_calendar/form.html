@@ -10,50 +10,85 @@
 {% block content %}
 <div class="calendar-page page-shell cal-form-page">
 
-    <nav class="cal-breadcrumb">
-        <a href="{% url 'company_calendar:home' %}">Company Calendar</a>
-        <span>/</span>
+    <nav class="cal-breadcrumb" aria-label="Breadcrumb">
+        <a href="{% url 'company_calendar:home' %}">Company calendar</a>
+        <span aria-hidden="true">/</span>
         <span>{{ title }}</span>
     </nav>
 
     <header class="cal-page-header">
         <div class="cal-page-header-main">
             <h1>{{ title }}</h1>
-            <p class="cal-page-subtitle">Schedule a holiday or company-wide event for all employees</p>
+            <p class="cal-page-subtitle">
+                {% if entry %}
+                Update this holiday or company-wide event
+                {% else %}
+                Schedule a holiday or company-wide event
+                {% endif %}
+            </p>
         </div>
     </header>
 
-    <div class="cal-form-card">
-        <form method="post" class="form-grid cal-form" novalidate>
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group {% if field.name in 'title,description' %}form-group-full{% endif %}{% if field.name == 'is_active' %} form-group-checkbox{% endif %}">
-                <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-                {{ field }}
-                {% if field.help_text %}<span class="text-muted text-sm">{{ field.help_text }}</span>{% endif %}
-                {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+    <form method="post" class="cal-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <div class="cal-form-fields">
+            <div class="form-group cal-form-span">
+                <label for="{{ form.title.id_for_label }}">{{ form.title.label }} *</label>
+                {{ form.title }}
+                {% if form.title.errors %}<span class="form-error">{{ form.title.errors.0 }}</span>{% endif %}
             </div>
-            {% endfor %}
-            <div class="form-actions form-group-full cal-form-actions">
-                <button type="submit" class="btn btn-primary">Save entry</button>
-                <a href="{% url 'company_calendar:home' %}" class="btn btn-outline">Cancel</a>
-                {% if entry %}
-                <button
-                    type="button"
-                    class="btn btn-outline btn-icon-danger cal-form-delete"
-                    data-modal="delete"
-                    data-url="{% url 'company_calendar:delete' entry.pk %}"
-                    data-name="{{ entry.title }}"
-                    title="Delete entry"
-                    aria-label="Delete {{ entry.title }}"
-                >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/></svg>
-                    Delete
-                </button>
-                {% endif %}
+
+            <div class="form-group">
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }} *</label>
+                {{ form.date }}
+                {% if form.date.errors %}<span class="form-error">{{ form.date.errors.0 }}</span>{% endif %}
             </div>
-        </form>
-    </div>
+
+            <div class="form-group">
+                <label for="{{ form.event_type.id_for_label }}">{{ form.event_type.label }} *</label>
+                {{ form.event_type }}
+                {% if form.event_type.errors %}<span class="form-error">{{ form.event_type.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group cal-form-span">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                <span class="form-help">Optional — shown on the calendar for employees</span>
+                {% if form.description.errors %}<span class="form-error">{{ form.description.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="cal-form-check cal-form-span">
+                {{ form.is_active }}
+                <div class="cal-form-check-copy">
+                    <label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+                    <span class="form-help">Uncheck to hide this entry without deleting it</span>
+                    {% if form.is_active.errors %}<span class="form-error">{{ form.is_active.errors.0 }}</span>{% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="cal-form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Save entry</button>
+            <a href="{% url 'company_calendar:home' %}" class="cal-text-link">Cancel</a>
+            {% if entry %}
+            <button
+                type="button"
+                class="cal-text-link cal-text-link--danger cal-form-delete"
+                data-modal="delete"
+                data-url="{% url 'company_calendar:delete' entry.pk %}"
+                data-name="{{ entry.title }}"
+                title="Delete entry"
+                aria-label="Delete {{ entry.title }}"
+            >
+                Delete
+            </button>
+            {% endif %}
+        </div>
+    </form>
 
 </div>
 {% endblock %}

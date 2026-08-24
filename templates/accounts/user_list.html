@@ -13,7 +13,6 @@
     <header class="sys-page-header">
         <div class="sys-page-header-main">
             <h1>Users</h1>
-            <p class="sys-page-subtitle">Manage system accounts — deactivate or delete access</p>
         </div>
         <div class="sys-page-header-actions">
             <a href="{% url 'accounts:employee_account_create' %}" class="btn btn-primary btn-sm">Add employee account</a>
@@ -58,7 +57,7 @@
                             <span class="text-muted">—</span>
                             {% endif %}
                         </td>
-                        <td><span class="badge badge-outline">{{ u.get_role_display }}</span></td>
+                        <td>{{ u.get_role_display }}</td>
                         <td>
                             {% if u.is_active %}
                             <span class="badge badge-active">Active</span>
@@ -71,17 +70,16 @@
                             {% if u.pk != user.pk %}
                             {% if not u.is_super_admin or user.is_super_admin %}
                             <div class="sys-actions-inline">
-                                <button type="button" class="btn btn-sm btn-outline" data-modal="toggle-active"
+                                <button type="button" class="ui-text-link" data-modal="toggle-active"
                                     data-url="{% url 'accounts:user_toggle_active' u.pk %}"
                                     data-name="{{ u.get_full_name|default:u.username }}"
                                     data-action="{% if u.is_active %}deactivate{% else %}activate{% endif %}">
                                     {% if u.is_active %}Deactivate{% else %}Activate{% endif %}
                                 </button>
-                                <button type="button" class="btn btn-sm btn-outline btn-icon-danger" data-modal="delete"
+                                <button type="button" class="ui-text-link is-danger" data-modal="delete"
                                     data-url="{% url 'accounts:user_delete' u.pk %}"
-                                    data-name="{{ u.get_full_name|default:u.username }}"
-                                    title="Delete account" aria-label="Delete {{ u.get_full_name|default:u.username }}">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/></svg>
+                                    data-name="{{ u.get_full_name|default:u.username }}">
+                                    Delete
                                 </button>
                             </div>
                             {% else %}

@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}Employees - Employee Directory{% endblock %}
+{% block page_section %}People{% endblock %}
+{% block page_heading %}Employee directory{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/employees.css' %}">
@@ -12,32 +14,47 @@
 
     <header class="dir-page-header">
         <div class="dir-page-header-copy">
-            <h1 class="dir-page-title">Employee Directory</h1>
-            <p class="dir-page-subtitle">Browse, search, and filter everyone in your organization.</p>
-        </div>
-    </header>
-
-    <div class="dir-stats-bar">
-        <div class="dir-stats">
-            <span class="dir-stat">Total employees:<strong id="statTotal">{{ site_total_employees }}</strong></span>
-            <span class="dir-stat">On leave today:<strong id="statOnLeave">{{ site_on_leave_count }}</strong></span>
-            <span class="dir-stat">New hires this month:<strong id="statNewHires">{{ site_new_hires }}</strong></span>
+            <h1 class="dir-page-title">Employee directory</h1>
+            <p class="dir-page-subtitle">Search, filter, and open employee profiles.</p>
         </div>
         {% if can_manage %}
-        <div class="dir-actions">
-            <a href="{% url 'employees:create' %}" class="btn btn-teal">Add employee</a>
-        </div>
+        <a href="{% url 'employees:create' %}" class="btn btn-primary btn-sm">Add employee</a>
         {% endif %}
-    </div>
+    </header>
 
-    <div class="dir-search-row">
+    <section class="dir-overview" aria-label="Directory metrics">
+        <div class="dir-overview-grid">
+            <div class="dir-overview-stat">
+                <span class="dir-overview-label">Employees</span>
+                <span class="dir-overview-value" id="statTotal">{{ site_total_employees }}</span>
+            </div>
+            <div class="dir-overview-stat">
+                <span class="dir-overview-label">On leave</span>
+                <span class="dir-overview-value" id="statOnLeave">{{ site_on_leave_count }}</span>
+            </div>
+            <div class="dir-overview-stat">
+                <span class="dir-overview-label">New this month</span>
+                <span class="dir-overview-value" id="statNewHires">{{ site_new_hires }}</span>
+            </div>
+            <div class="dir-overview-stat">
+                <span class="dir-overview-label">Showing</span>
+                <span class="dir-overview-value" id="statShowing">{{ pagination.total_count }}</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="dir-toolbar">
         <div class="dir-search-wrap">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-            <input type="search" id="searchInput" class="dir-search-input" placeholder="Search by name, email, or department…" value="{{ filters.search }}" autocomplete="off" aria-label="Search employees">
+            <input type="search" id="searchInput" class="dir-search-input" placeholder="Search employees" value="{{ filters.search }}" autocomplete="off" aria-label="Search employees">
         </div>
-        <button type="button" class="dir-filter-btn" id="toggleFiltersBtn" aria-expanded="false" aria-controls="filtersPanel" title="Show filters" aria-label="Show filters">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+        <button type="button" class="dir-filter-btn" id="toggleFiltersBtn" aria-expanded="false" aria-controls="filtersPanel" title="Filters" aria-label="Show filters">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
         </button>
+        <div class="view-toggle" role="group" aria-label="View mode">
+            <button type="button" class="view-btn {% if view_mode == 'card' %}active{% endif %}" data-view="card" aria-pressed="{% if view_mode == 'card' %}true{% else %}false{% endif %}">List</button>
+            <button type="button" class="view-btn {% if view_mode == 'table' %}active{% endif %}" data-view="table" aria-pressed="{% if view_mode == 'table' %}true{% else %}false{% endif %}">Table</button>
+        </div>
     </div>
 
     <div class="dir-filters-panel" id="filtersPanel">
@@ -79,12 +96,7 @@
             </select>
         </div>
         <div class="filter-group filter-actions">
-            <label class="filter-label">View</label>
-            <div class="view-toggle" role="group" aria-label="View mode">
-                <button type="button" class="view-btn {% if view_mode == 'card' %}active{% endif %}" data-view="card" title="Card view">Cards</button>
-                <button type="button" class="view-btn {% if view_mode == 'table' %}active{% endif %}" data-view="table" title="Table view">Table</button>
-            </div>
-            <button type="button" class="btn btn-outline btn-sm" id="clearFiltersBtn" hidden>Clear</button>
+            <button type="button" class="emp-text-link" id="clearFiltersBtn" hidden>Clear filters</button>
         </div>
     </div>
 
@@ -96,15 +108,6 @@
 
     <div class="loading-overlay" id="directoryResults">
         <div class="loading-spinner" aria-hidden="true"></div>
-
-        <div class="dir-grid-headers {% if view_mode != 'card' %}hidden{% endif %}" id="gridHeaders">
-            <span></span>
-            <span>Name</span>
-            <span>Role</span>
-            <span>Company</span>
-            <span>Actions</span>
-            <span>QR</span>
-        </div>
 
         <div id="cardView" class="dir-alpha-grid {% if view_mode != 'card' %}hidden{% endif %}">
             {% regroup employees by last_name|first|upper as alpha_groups %}
@@ -118,7 +121,7 @@
                 </div>
             </section>
             {% empty %}
-            {% include "includes/empty_state.html" with icon="◎" title="No employees found" message="Try a different search or clear your filters." secondary_url="#" secondary_label="Clear filters" %}
+            {% include "includes/empty_state.html" with title="No employees found" message="Try a different search or clear your filters." secondary_url="#" secondary_label="Clear filters" compact=1 %}
             {% endfor %}
         </div>
 
@@ -132,6 +135,7 @@
                         <th>Position</th>
                         <th>Status</th>
                         <th>Email</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -152,9 +156,12 @@
                         <td>{{ emp.position.title }}</td>
                         <td><span class="badge badge-{{ emp.employment_status }}">{{ emp.get_employment_status_display }}</span></td>
                         <td>{{ emp.email }}</td>
+                        <td class="actions-cell">
+                            <a href="{% url 'employees:detail' emp.pk %}" class="btn btn-outline btn-sm">View</a>
+                        </td>
                     </tr>
                     {% empty %}
-                    <tr><td colspan="6">{% include "includes/empty_state.html" with icon="◎" title="No employees found" message="Adjust your search or filters." compact=1 %}</td></tr>
+                    <tr><td colspan="7">{% include "includes/empty_state.html" with title="No employees found" message="Adjust your search or filters." compact=1 %}</td></tr>
                     {% endfor %}
                 </tbody>
             </table>

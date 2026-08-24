@@ -23,23 +23,36 @@
 }
 
 .rec-page-header-main h1 {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    margin: 0 0 0.25rem;
+    font-size: 1.375rem;
+    font-weight: 650;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin: 0;
     color: var(--text-primary);
+    text-transform: none;
 }
 
 .rec-page-subtitle {
-    margin: 0;
+    margin: 0.25rem 0 0;
     font-size: 0.875rem;
+    line-height: 1.45;
     color: var(--text-muted);
+}
+
+.rec-list-page .rec-page-subtitle,
+.rec-pipeline-page .rec-page-subtitle {
+    display: none;
 }
 
 .rec-page-header-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rec-nav {
+    display: none;
 }
 
 .rec-breadcrumb {
@@ -49,7 +62,7 @@
 }
 
 .rec-breadcrumb a {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     text-decoration: none;
 }
 
@@ -57,121 +70,110 @@
     color: var(--color-primary);
 }
 
-.rec-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-}
-
-.rec-nav-link {
-    display: inline-flex;
-    padding: 0.4375rem 0.875rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: 9999px;
-    transition: color var(--transition), border-color var(--transition), background var(--transition);
-}
-
-.rec-nav-link:hover {
-    color: var(--color-primary);
-    border-color: var(--color-primary);
-    background: var(--color-primary-light);
-}
-
-.rec-stats {
+/* KPI strip */
+.rec-overview-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 0.875rem 0;
+    border-top: 1px solid var(--border-subtle);
+    border-bottom: 1px solid var(--border-subtle);
 }
 
-.rec-stat {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    padding: 1rem 1.125rem;
-    text-align: left;
+.rec-overview-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+    padding: 0 1rem;
+    border-right: 1px solid var(--border-subtle);
 }
 
-.rec-stat-value {
-    display: block;
-    font-size: 1.375rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--text-primary);
-    line-height: 1.1;
+.rec-overview-stat:first-child {
+    padding-left: 0;
 }
 
-.rec-stat-label {
-    display: block;
-    margin-top: 0.25rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
+.rec-overview-stat:last-child {
+    border-right: none;
+    padding-right: 0;
+}
+
+.rec-overview-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
     color: var(--text-muted);
 }
 
-.rec-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
+.rec-overview-value {
+    font-size: 1.25rem;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    line-height: 1.2;
 }
 
-.rec-card {
+.rec-list {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
-    padding: 1rem 1.125rem;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    transition: border-color var(--transition);
+    border-top: 1px solid var(--border-subtle);
 }
 
-.rec-card:hover {
-    border-color: var(--color-primary);
+.rec-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 0;
+    border-bottom: 1px solid var(--border-subtle);
 }
 
-.rec-card h3 {
+.rec-row-hit {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.rec-row-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.rec-row-copy h3 {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 600;
+    line-height: 1.3;
 }
 
-.rec-card h3 a {
+.rec-row-copy h3 a {
     color: var(--text-primary);
     text-decoration: none;
+    position: relative;
+    z-index: 2;
 }
 
-.rec-card h3 a:hover {
+.rec-row:hover .rec-row-copy h3 a {
     color: var(--color-primary);
 }
 
-.rec-card-meta {
-    margin: 0;
+.rec-row-meta {
+    margin: 0.125rem 0 0;
     font-size: 0.75rem;
     color: var(--text-muted);
 }
 
-.rec-card-desc {
-    margin: 0;
-    font-size: 0.8125rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+.rec-row-status {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--text-muted);
 }
 
-.rec-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: 0.25rem;
+.rec-row-action {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
 }
 
 .rec-panels {
@@ -181,10 +183,11 @@
 }
 
 .rec-section {
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    overflow: hidden;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 0;
+    overflow: visible;
 }
 
 .rec-section--full {
@@ -197,21 +200,23 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding: 0.875rem 1.125rem;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--bg-body);
+    padding: 0.875rem 0 0.5rem;
+    border-bottom: none;
+    background: transparent;
 }
 
 .rec-section-header h2,
 .rec-section-header h3 {
     margin: 0;
-    font-size: 0.9375rem;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-primary);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
 }
 
 .rec-section-body {
-    padding: 1rem 1.125rem 1.125rem;
+    padding: 0 0 1.25rem;
     font-size: 0.875rem;
     line-height: 1.6;
     color: var(--text-secondary);
@@ -242,15 +247,13 @@
 }
 
 .rec-form-section .rec-section-body {
-    padding: 1.25rem;
+    padding: 0;
 }
 
 .rec-empty {
-    text-align: center;
-    padding: 3rem 1.5rem;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
+    padding: 2rem 0;
+    background: transparent;
+    border: none;
 }
 
 .rec-empty h3 {
@@ -277,10 +280,11 @@
 
 .rec-pipeline-column {
     min-width: 170px;
-    background: var(--bg-surface);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-lg);
-    padding: 0.75rem;
+    background: transparent;
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    border-radius: 0;
+    padding: 0.75rem 0 0;
 }
 
 .rec-pipeline-column-header {
@@ -290,25 +294,25 @@
     gap: 0.5rem;
     margin-bottom: 0.625rem;
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-subtle);
     font-size: 0.6875rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.06em;
     color: var(--text-muted);
 }
 
 .rec-pipeline-card {
     display: block;
-    padding: 0.625rem 0.75rem;
-    margin-bottom: 0.375rem;
-    background: var(--bg-body);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
+    padding: 0.625rem 0;
+    margin-bottom: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border-subtle);
+    border-radius: 0;
     color: var(--text-primary);
     text-decoration: none;
     font-size: 0.8125rem;
-    transition: border-color var(--transition);
 }
 
 .rec-pipeline-card:hover {
@@ -367,8 +371,15 @@
 }
 
 @media (max-width: 768px) {
-    .rec-grid,
+    .rec-overview-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .rec-panels {
         grid-template-columns: 1fr;
+    }
+
+    .rec-row {
+        flex-wrap: wrap;
     }
 }

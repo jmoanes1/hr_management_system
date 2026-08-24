@@ -121,7 +121,7 @@
 
         <div class="ea-form-actions">
             <button type="submit" class="btn btn-primary">{% if is_create %}Create account{% else %}Save changes{% endif %}</button>
-            <a href="{% if employee %}{% url 'accounts:employee_account_detail' employee.pk %}{% else %}{% url 'accounts:employee_account_list' %}{% endif %}" class="btn btn-outline">Cancel</a>
+            <a href="{% if employee %}{% url 'accounts:employee_account_detail' employee.pk %}{% else %}{% url 'accounts:employee_account_list' %}{% endif %}" class="ui-text-link">Cancel</a>
         </div>
     </form>
 

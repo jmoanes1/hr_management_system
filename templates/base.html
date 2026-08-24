@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{% static 'css/theme-directory.css' %}">
     <link rel="stylesheet" href="{% static 'css/site-polish.css' %}">
     {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'css/design-system.css' %}">
 </head>
 <body class="{% if user.is_authenticated and not standalone_auth %}app-authenticated{% endif %}">
     <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -24,6 +25,9 @@
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 {% include "includes/app_logo.html" %}
+                <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" type="button" aria-label="Collapse sidebar" title="Collapse sidebar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
+                </button>
             </div>
 
             {% include "includes/sidebar_nav.html" %}
@@ -73,84 +77,83 @@
 
         <div class="main-wrapper">
             <header class="topbar">
-                <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                <button class="menu-toggle" id="menuToggle" type="button" aria-label="Toggle menu">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
                 </button>
                 <div class="topbar-brand-mobile">
                     {% include "includes/app_logo.html" with logo_compact=True %}
                 </div>
-                <div class="topbar-search">
-                    <form action="{% url 'employees:list' %}" method="get" aria-label="Search employees">
-                        <input type="search" name="search" placeholder="Search employees…" class="search-input" aria-label="Search employees">
-                    </form>
+                <div class="topbar-context">
+                    <span class="topbar-context-kicker">{% block page_section %}Workspace{% endblock %}</span>
+                    <span class="topbar-context-title">{% block page_heading %}Employee Directory{% endblock %}</span>
                 </div>
-                <a href="{% url 'employees:list' %}" class="topbar-mobile-search" aria-label="Browse employee directory">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
-                    <span>Directory</span>
-                </a>
+                <form action="{% url 'employees:list' %}" method="get" class="topbar-search" role="search">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                    <input type="search" name="search" placeholder="Search employees" class="search-input" aria-label="Search employees" autocomplete="off">
+                </form>
                 <div class="topbar-actions">
-                    <div class="topbar-clock" id="topbarClock" aria-live="polite">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-                        <span id="topbarClockText">--:-- --</span>
-                    </div>
-                    <div class="notification-center" id="notificationCenter">
-                        <button class="notification-btn" id="notificationBtn" type="button" aria-label="Notifications">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
-                            {% if unread_notification_count %}
-                            <span class="notification-count">{{ unread_notification_count }}</span>
-                            {% endif %}
-                        </button>
-                        <div class="notification-dropdown" id="notificationDropdown">
-                            <div class="notification-dropdown-header">
-                                <strong>Notifications</strong>
+                    <div class="topbar-tools">
+                        <a href="{% url 'employees:list' %}" class="topbar-icon-btn topbar-mobile-search" aria-label="Search employees">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                        </a>
+                        <div class="notification-center" id="notificationCenter">
+                            <button class="topbar-icon-btn notification-btn" id="notificationBtn" type="button" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" aria-controls="notificationDropdown" title="Notifications">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
                                 {% if unread_notification_count %}
-                                <form action="{% url 'notifications:mark_all_read' %}" method="post" class="inline-form">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn-link">Mark all read</button>
-                                </form>
+                                <span class="notification-count">{{ unread_notification_count }}</span>
                                 {% endif %}
+                            </button>
+                            <div class="notification-dropdown" id="notificationDropdown" role="menu">
+                                <div class="notification-dropdown-header">
+                                    <strong>Notifications</strong>
+                                    {% if unread_notification_count %}
+                                    <form action="{% url 'notifications:mark_all_read' %}" method="post" class="inline-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-link">Mark all read</button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                <div class="notification-dropdown-body">
+                                    {% if recent_notifications %}
+                                    {% for n in recent_notifications %}
+                                    <form action="{% url 'notifications:mark_read' n.pk %}" method="post" class="notification-item {% if not n.is_read %}notification-unread{% endif %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="notification-item-btn">
+                                            <span class="notification-item-title">{{ n.title }}</span>
+                                            <span class="notification-item-msg">{{ n.message|truncatewords:12 }}</span>
+                                            <span class="notification-item-time">{{ n.created_at|timesince }} ago</span>
+                                        </button>
+                                    </form>
+                                    {% endfor %}
+                                    {% else %}
+                                    <p class="notification-empty">No notifications yet</p>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'notifications:list' %}" class="notification-dropdown-footer">View all</a>
                             </div>
-                            <div class="notification-dropdown-body">
-                                {% if recent_notifications %}
-                                {% for n in recent_notifications %}
-                                <form action="{% url 'notifications:mark_read' n.pk %}" method="post" class="notification-item {% if not n.is_read %}notification-unread{% endif %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="notification-item-btn">
-                                        <span class="notification-item-title">{{ n.title }}</span>
-                                        <span class="notification-item-msg">{{ n.message|truncatewords:12 }}</span>
-                                        <span class="notification-item-time">{{ n.created_at|timesince }} ago</span>
-                                    </button>
-                                </form>
-                                {% endfor %}
-                                {% else %}
-                                <p class="notification-empty">No notifications yet</p>
-                                {% endif %}
-                            </div>
-                            <a href="{% url 'notifications:list' %}" class="notification-dropdown-footer">View all notifications</a>
                         </div>
-                    </div>
-                    {% if birthday_employees %}
-                    <a href="{% url 'dashboard:home' %}#celebrations" class="notification-badge notification-badge--birthday" title="{{ birthday_employees|length }} birthday{{ birthday_employees|length|pluralize }} today" aria-label="{{ birthday_employees|length }} birthday{{ birthday_employees|length|pluralize }} today">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-8a2 2 0 00-2-2H6a2 2 0 00-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3M12 8v3M17 8v3M7 4h.01M12 4h.01M17 4h.01"/></svg>
-                        <span>{{ birthday_employees|length }}</span>
-                    </a>
-                    {% endif %}
-                    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" type="button">
-                        <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-                        <svg class="theme-icon-sun hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                    </button>
-                    <div class="user-menu">
-                        <button class="user-menu-btn" id="userMenuBtn" type="button">
-                            {% include "includes/user_avatar.html" %}
-                            <span class="user-name">{{ user.get_full_name|default:user.username }}</span>
+                        {% if birthday_employees %}
+                        <a href="{% url 'dashboard:home' %}#celebrations" class="topbar-icon-btn topbar-birthday-btn" title="{{ birthday_employees|length }} birthday{{ birthday_employees|length|pluralize }} today" aria-label="{{ birthday_employees|length }} birthday{{ birthday_employees|length|pluralize }} today">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M20 21v-8a2 2 0 00-2-2H6a2 2 0 00-2 2v8"/><path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1"/><path d="M2 21h20"/><path d="M7 8v3M12 8v3M17 8v3M7 4h.01M12 4h.01M17 4h.01"/></svg>
+                            <span class="notification-count">{{ birthday_employees|length }}</span>
+                        </a>
+                        {% endif %}
+                        <button class="topbar-icon-btn theme-toggle" id="themeToggle" aria-label="Toggle dark mode" type="button" title="Toggle dark mode">
+                            <svg class="theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                            <svg class="theme-icon-sun hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
                         </button>
-                        <div class="user-dropdown" id="userDropdown">
-                            <a href="{% url 'accounts:profile' %}">My Profile</a>
-                            <a href="{% url 'accounts:change_password' %}">Change Password</a>
-                            <form action="{% url 'accounts:logout' %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="dropdown-logout">Sign Out</button>
-                            </form>
+                        <div class="user-menu">
+                            <button class="topbar-icon-btn user-menu-btn" id="userMenuBtn" type="button" aria-label="Account menu" aria-haspopup="true" aria-expanded="false" title="{{ user.get_full_name|default:user.username }}">
+                                {% include "includes/user_avatar.html" %}
+                            </button>
+                            <div class="user-dropdown" id="userDropdown">
+                                <a href="{% url 'accounts:profile' %}">My profile</a>
+                                <a href="{% url 'accounts:change_password' %}">Change password</a>
+                                <form action="{% url 'accounts:logout' %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-logout">Sign out</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -10,37 +10,73 @@
 {% block content %}
 <div class="departments-page page-shell departments-form-page">
 
-    <nav class="dept-breadcrumb">
+    <nav class="dept-breadcrumb" aria-label="Breadcrumb">
         <a href="{% url 'departments:list' %}">Departments</a>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
         <span>{{ title }}</span>
     </nav>
 
     <header class="dept-page-header">
         <div class="dept-page-header-main">
             <h1>{{ title }}</h1>
-            <p class="dept-page-subtitle">Update department details and leadership</p>
+            <p class="dept-page-subtitle">
+                {% if department %}
+                Update this team's details and leadership
+                {% else %}
+                Add a team and optional department head
+                {% endif %}
+            </p>
         </div>
     </header>
 
-    <div class="card dept-form-card">
-        <div class="card-body">
-            <form method="post" class="form-grid dept-form" novalidate>
-                {% csrf_token %}
-                {% for field in form %}
-                <div class="form-group {% if field.name == 'description' %}form-group-full{% endif %}">
-                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+    <form method="post" class="dept-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-error" role="alert">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+
+        <div class="dept-form-fields">
+            <div class="form-group dept-form-span">
+                <label for="{{ form.name.id_for_label }}">{{ form.name.label }} *</label>
+                {{ form.name }}
+                {% if form.name.errors %}<span class="form-error">{{ form.name.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.code.id_for_label }}">{{ form.code.label }}</label>
+                {{ form.code }}
+                <span class="form-help">Optional — generated from the name if left blank</span>
+                {% if form.code.errors %}<span class="form-error">{{ form.code.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.head.id_for_label }}">{{ form.head.label }}</label>
+                {{ form.head }}
+                {% if form.head.errors %}<span class="form-error">{{ form.head.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-group dept-form-span">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                <span class="form-help">Optional — shown on the departments list</span>
+                {% if form.description.errors %}<span class="form-error">{{ form.description.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="dept-form-check dept-form-span">
+                {{ form.is_active }}
+                <div class="dept-form-check-copy">
+                    <label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label>
+                    <span class="form-help">Uncheck to hide this department without deleting it</span>
+                    {% if form.is_active.errors %}<span class="form-error">{{ form.is_active.errors.0 }}</span>{% endif %}
                 </div>
-                {% endfor %}
-                <div class="form-actions form-group-full">
-                    <button type="submit" class="btn btn-primary">Save department</button>
-                    <a href="{% url 'departments:list' %}" class="btn btn-outline">Cancel</a>
-                </div>
-            </form>
+            </div>
         </div>
-    </div>
+
+        <div class="dept-form-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Save department</button>
+            <a href="{% url 'departments:list' %}" class="dept-text-link">Cancel</a>
+        </div>
+    </form>
 
 </div>
 {% endblock %}

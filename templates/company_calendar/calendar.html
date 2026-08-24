@@ -12,8 +12,7 @@
 
     <header class="cal-page-header">
         <div class="cal-page-header-main">
-            <h1>Company Calendar</h1>
-            <p class="cal-page-subtitle">Holidays, company events, and employee birthdays</p>
+            <h1>Company calendar</h1>
         </div>
         {% if can_manage %}
         <div class="cal-page-header-actions">
@@ -27,23 +26,25 @@
             <input type="hidden" name="year" value="{{ year }}">
             <input type="hidden" name="month" value="{{ month }}">
             <label class="visually-hidden" for="calSearch">Search calendar</label>
-            <input
-                type="search"
-                id="calSearch"
-                name="q"
-                class="form-control"
-                value="{{ search }}"
-                placeholder="Search holidays, events, or birthdays…"
-            >
-            <button type="submit" class="btn btn-outline btn-sm">Search</button>
+            <div class="cal-search-wrap">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3-3"/></svg>
+                <input
+                    type="search"
+                    id="calSearch"
+                    name="q"
+                    class="cal-search-input"
+                    value="{{ search }}"
+                    placeholder="Search holidays, events, or birthdays"
+                >
+            </div>
             {% if search %}
-            <a href="?year={{ year }}&month={{ month }}" class="btn btn-outline btn-sm">Clear</a>
+            <a href="?year={{ year }}&month={{ month }}" class="cal-text-link">Clear</a>
             {% endif %}
         </form>
 
         <div class="cal-legend" aria-label="Event type legend">
             <span class="cal-legend-item cal-legend-item--holiday">Holiday</span>
-            <span class="cal-legend-item cal-legend-item--company_event">Company event</span>
+            <span class="cal-legend-item cal-legend-item--company_event">Event</span>
             <span class="cal-legend-item cal-legend-item--birthday">Birthday</span>
         </div>
     </div>
@@ -65,14 +66,12 @@
                 {% endif %}
                 {% if can_manage and item.is_editable %}
                 <div class="cal-event-list-actions">
-                    <a href="{% url 'company_calendar:edit' item.entry_id %}" class="btn btn-sm btn-outline">Edit</a>
-                    <button type="button" class="btn btn-sm btn-outline btn-icon-danger" data-modal="delete" data-url="{% url 'company_calendar:delete' item.entry_id %}" data-name="{{ item.title }}" title="Delete entry" aria-label="Delete {{ item.title }}">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6M10 11v6M14 11v6"/></svg>
-                    </button>
+                    <a href="{% url 'company_calendar:edit' item.entry_id %}" class="cal-text-link">Edit</a>
+                    <button type="button" class="cal-text-link cal-text-link--danger" data-modal="delete" data-url="{% url 'company_calendar:delete' item.entry_id %}" data-name="{{ item.title }}" title="Delete entry" aria-label="Delete {{ item.title }}">Delete</button>
                 </div>
                 {% elif item.employee_id %}
                 <div class="cal-event-list-actions">
-                    <a href="{% url 'employees:detail' item.employee_id %}" class="btn btn-sm btn-outline">View profile</a>
+                    <a href="{% url 'employees:detail' item.employee_id %}" class="cal-text-link">View profile</a>
                 </div>
                 {% endif %}
             </li>
@@ -88,18 +87,18 @@
     <div class="cal-layout">
         <section class="cal-month-panel" aria-labelledby="calMonthTitle">
             <div class="cal-month-nav">
-                <a href="{{ prev_url }}" class="btn btn-outline btn-sm cal-nav-btn" aria-label="Previous month">← Prev</a>
+                <a href="{{ prev_url }}" class="cal-nav-link" aria-label="Previous month">Previous</a>
                 <div class="cal-month-title-wrap">
                     <h2 id="calMonthTitle">{{ month_label }}</h2>
                     <p class="cal-month-stats">
-                        {{ holiday_count }} holiday{{ holiday_count|pluralize }},
-                        {{ event_count }} event{{ event_count|pluralize }},
+                        {{ holiday_count }} holiday{{ holiday_count|pluralize }} ·
+                        {{ event_count }} event{{ event_count|pluralize }} ·
                         {{ birthday_count }} birthday{{ birthday_count|pluralize }}
                     </p>
                 </div>
-                <a href="{{ next_url }}" class="btn btn-outline btn-sm cal-nav-btn" aria-label="Next month">Next →</a>
+                <a href="{{ next_url }}" class="cal-nav-link" aria-label="Next month">Next</a>
             </div>
-            <a href="{{ today_url }}" class="btn btn-outline btn-sm cal-today-btn">Today</a>
+            <a href="{{ today_url }}" class="cal-nav-link cal-today-link">Today</a>
 
             <div class="cal-grid" role="grid" aria-label="Monthly calendar for {{ month_label }}">
                 <div class="cal-grid-head" role="row">
@@ -147,23 +146,23 @@
 
         <aside class="cal-sidebar">
             <section class="cal-sidebar-section">
-                <h3>Today's events</h3>
+                <h3>Today</h3>
                 {% if todays_events %}
                 <ul class="cal-upcoming-list">
                     {% for item in todays_events %}
                     <li class="cal-upcoming-item">
-                        <span class="cal-upcoming-date">Today</span>
+                        <span class="cal-dot {{ item.type_css_class }}" aria-hidden="true"></span>
                         <div>
-                            <span class="cal-event-chip {{ item.type_css_class }}">{{ item.type_label }}</span>
                             <p class="cal-upcoming-title">
                                 {% if item.icon %}<span class="cal-event-icon" aria-hidden="true">{{ item.icon }}</span> {% endif %}{{ item.title }}
                             </p>
+                            <span class="cal-upcoming-meta">{{ item.type_label }}</span>
                         </div>
                     </li>
                     {% endfor %}
                 </ul>
                 {% else %}
-                <p class="cal-sidebar-empty">Nothing scheduled for today.</p>
+                <p class="cal-sidebar-empty">Nothing scheduled today.</p>
                 {% endif %}
             </section>
 
@@ -175,10 +174,10 @@
                     <li class="cal-upcoming-item">
                         <span class="cal-upcoming-date">{{ item.date|date:"M j" }}</span>
                         <div>
-                            <span class="cal-event-chip {{ item.type_css_class }}">{{ item.type_label }}</span>
                             <p class="cal-upcoming-title">
                                 {% if item.icon %}<span class="cal-event-icon" aria-hidden="true">{{ item.icon }}</span> {% endif %}{{ item.title }}
                             </p>
+                            <span class="cal-upcoming-meta">{{ item.type_label }}</span>
                         </div>
                     </li>
                     {% endfor %}

@@ -1,28 +1,33 @@
 {% extends "base.html" %}
 
 {% block title %}Register User - Employee Directory{% endblock %}
+{% block page_section %}Admin{% endblock %}
+{% block page_heading %}Register user{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h1>Register New User</h1>
-    <p class="text-muted">Admin-controlled user registration</p>
-</div>
-<div class="card">
-    <div class="card-body">
-        <form method="post" class="form-grid" novalidate>
-            {% csrf_token %}
-            {% for field in form %}
-            <div class="form-group">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
-            </div>
-            {% endfor %}
-            <div class="form-actions form-group-full">
-                <button type="submit" class="btn btn-primary">Register User</button>
-                <a href="{% url 'accounts:user_list' %}" class="btn btn-outline">Cancel</a>
-            </div>
-        </form>
+<div class="page-shell">
+    <div class="page-header">
+        <h1>Register user</h1>
+        <p class="text-muted">Create an administrator or HR account. Employee logins are created from Employee accounts.</p>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <form method="post" class="form-grid" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.help_text %}<span class="form-help">{{ field.help_text }}</span>{% endif %}
+                    {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
+                </div>
+                {% endfor %}
+                <div class="form-actions form-group-full">
+                    <button type="submit" class="btn btn-primary">Register user</button>
+                    <a href="{% url 'accounts:user_list' %}" class="btn btn-outline">Cancel</a>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

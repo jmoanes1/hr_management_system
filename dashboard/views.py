@@ -157,9 +157,9 @@ def dashboard_home(request):
         leave_requests__end_date__gte=today_date,
     ).distinct().select_related("department")[:8]
 
-    pending_approvals = LeaveRequest.objects.filter(
-        status=LeaveRequest.Status.PENDING
-    ).select_related("employee", "leave_type")[:8]
+    pending_leave_qs = LeaveRequest.objects.filter(status=LeaveRequest.Status.PENDING)
+    pending_leave_count = pending_leave_qs.count()
+    pending_approvals = pending_leave_qs.select_related("employee", "leave_type")[:8]
 
     recent_activities = ActivityLog.objects.select_related("user")[:12]
 
@@ -190,6 +190,7 @@ def dashboard_home(request):
         "announcements": announcements,
         "employees_on_leave": employees_on_leave,
         "pending_approvals": pending_approvals,
+        "pending_leave_count": pending_leave_count,
         "recent_activities": recent_activities,
         "today": now,
     }

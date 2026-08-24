@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block title %}{{ title }} - Employee Directory{% endblock %}
+{% block page_section %}Directory{% endblock %}
+{% block page_heading %}{{ title }}{% endblock %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/employees.css' %}">
@@ -10,9 +12,9 @@
 {% block content %}
 <div class="employees-page page-shell emp-form-page">
 
-    <nav class="emp-breadcrumb">
+    <nav class="emp-breadcrumb" aria-label="Breadcrumb">
         <a href="{% url 'employees:list' %}">Employees</a>
-        <span>/</span>
+        <span aria-hidden="true">/</span>
         <span>{{ title }}</span>
     </nav>
 
@@ -21,9 +23,9 @@
             <h1>{{ title }}</h1>
             <p class="emp-page-subtitle">
                 {% if employee %}
-                Update employee record details
+                Update this directory record
                 {% else %}
-                Add a new member to the directory
+                Add a member to the directory
                 {% endif %}
             </p>
         </div>
@@ -31,135 +33,170 @@
 
     <form method="post" enctype="multipart/form-data" class="emp-form" id="employeeForm" novalidate>
         {% csrf_token %}
+        {# Preserve legacy combined emergency field without showing it twice #}
+        {{ form.emergency_contact.as_hidden }}
 
         {% if form.non_field_errors %}
-        <div class="alert alert-error emp-form-alert" role="alert">
-            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
-        </div>
+        <div class="form-error" role="alert">{{ form.non_field_errors.0 }}</div>
         {% endif %}
 
         <section class="emp-form-section">
-            <div class="emp-form-section-header">
-                <h2>Personal information</h2>
-                <p>Basic identity and contact details</p>
-            </div>
-            <div class="emp-form-section-body">
-                <div class="form-grid">
-                    <div class="emp-name-row form-group-full">
-                        <div class="form-group">
-                            <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }} *</label>
-                            {{ form.first_name }}
-                            {% if form.first_name.errors %}<span class="form-error">{{ form.first_name.errors.0 }}</span>{% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.middle_name.id_for_label }}">{{ form.middle_name.label }}</label>
-                            {{ form.middle_name }}
-                            {% if form.middle_name.errors %}<span class="form-error">{{ form.middle_name.errors.0 }}</span>{% endif %}
-                        </div>
-                        <div class="form-group">
-                            <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }} *</label>
-                            {{ form.last_name }}
-                            {% if form.last_name.errors %}<span class="form-error">{{ form.last_name.errors.0 }}</span>{% endif %}
-                        </div>
-                        <div class="form-group emp-name-suffix">
-                            <label for="{{ form.suffix.id_for_label }}">{{ form.suffix.label }}</label>
-                            {{ form.suffix }}
-                            {% if form.suffix.errors %}<span class="form-error">{{ form.suffix.errors.0 }}</span>{% endif %}
-                        </div>
+            <h2>Personal</h2>
+            <div class="emp-form-fields">
+                <div class="emp-name-row emp-form-span">
+                    <div class="form-group">
+                        <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }} *</label>
+                        {{ form.first_name }}
+                        {% if form.first_name.errors %}<span class="form-error">{{ form.first_name.errors.0 }}</span>{% endif %}
                     </div>
+                    <div class="form-group">
+                        <label for="{{ form.middle_name.id_for_label }}">{{ form.middle_name.label }}</label>
+                        {{ form.middle_name }}
+                        {% if form.middle_name.errors %}<span class="form-error">{{ form.middle_name.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }} *</label>
+                        {{ form.last_name }}
+                        {% if form.last_name.errors %}<span class="form-error">{{ form.last_name.errors.0 }}</span>{% endif %}
+                    </div>
+                    <div class="form-group emp-name-suffix">
+                        <label for="{{ form.suffix.id_for_label }}">{{ form.suffix.label }}</label>
+                        {{ form.suffix }}
+                        {% if form.suffix.errors %}<span class="form-error">{{ form.suffix.errors.0 }}</span>{% endif %}
+                    </div>
+                </div>
 
-                    {% for field in form %}
-                    {% if field.name in "email,phone_number,date_of_birth,gender,address,profile_photo" %}
-                    <div class="form-group {% if field.name in 'address,profile_photo' %}form-group-full{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-                        {{ field }}
-                        {% if field.name == 'profile_photo' %}
-                        <span class="form-help">JPG or PNG, max 5 MB</span>
-                        {% endif %}
-                        {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
-                    </div>
-                    {% endif %}
-                    {% endfor %}
+                <div class="form-group">
+                    <label for="{{ form.email.id_for_label }}">{{ form.email.label }} *</label>
+                    {{ form.email }}
+                    {% if form.email.errors %}<span class="form-error">{{ form.email.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.phone_number.id_for_label }}">{{ form.phone_number.label }}</label>
+                    {{ form.phone_number }}
+                    {% if form.phone_number.errors %}<span class="form-error">{{ form.phone_number.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.date_of_birth.id_for_label }}">{{ form.date_of_birth.label }}</label>
+                    {{ form.date_of_birth }}
+                    {% if form.date_of_birth.errors %}<span class="form-error">{{ form.date_of_birth.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.gender.id_for_label }}">{{ form.gender.label }}</label>
+                    {{ form.gender }}
+                    {% if form.gender.errors %}<span class="form-error">{{ form.gender.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group emp-form-span">
+                    <label for="{{ form.address.id_for_label }}">{{ form.address.label }}</label>
+                    {{ form.address }}
+                    {% if form.address.errors %}<span class="form-error">{{ form.address.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group emp-form-span">
+                    <label for="{{ form.profile_photo.id_for_label }}">{{ form.profile_photo.label }}</label>
+                    {{ form.profile_photo }}
+                    <span class="form-help">Optional — JPG or PNG, max 5 MB</span>
+                    {% if form.profile_photo.errors %}<span class="form-error">{{ form.profile_photo.errors.0 }}</span>{% endif %}
                 </div>
             </div>
         </section>
 
         <section class="emp-form-section">
-            <div class="emp-form-section-header">
-                <h2>Employment information</h2>
-                <p>Department, position, and work details</p>
-            </div>
-            <div class="emp-form-section-body">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label for="{{ form.department.id_for_label }}">{{ form.department.label }} *</label>
-                        {{ form.department }}
-                        {% if form.department.errors %}<span class="form-error">{{ form.department.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.position.id_for_label }}">{{ form.position.label }} *</label>
-                        {{ form.position }}
-                        {% if form.position.errors %}<span class="form-error">{{ form.position.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.manager.id_for_label }}">{{ form.manager.label }}</label>
-                        {{ form.manager }}
-                        {% if form.manager.errors %}<span class="form-error">{{ form.manager.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.date_hired.id_for_label }}">{{ form.date_hired.label }} *</label>
-                        {{ form.date_hired }}
-                        {% if form.date_hired.errors %}<span class="form-error">{{ form.date_hired.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.employment_status.id_for_label }}">{{ form.employment_status.label }} *</label>
-                        {{ form.employment_status }}
-                        {% if form.employment_status.errors %}<span class="form-error">{{ form.employment_status.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.employee_type.id_for_label }}">{{ form.employee_type.label }} *</label>
-                        {{ form.employee_type }}
-                        {% if form.employee_type.errors %}<span class="form-error">{{ form.employee_type.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.work_location.id_for_label }}">{{ form.work_location.label }}</label>
-                        {{ form.work_location }}
-                        {% if form.work_location.errors %}<span class="form-error">{{ form.work_location.errors.0 }}</span>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label for="{{ form.availability_status.id_for_label }}">{{ form.availability_status.label }}</label>
-                        {{ form.availability_status }}
-                        {% if form.availability_status.errors %}<span class="form-error">{{ form.availability_status.errors.0 }}</span>{% endif %}
-                    </div>
+            <h2>Employment</h2>
+            <div class="emp-form-fields">
+                <div class="form-group">
+                    <label for="{{ form.department.id_for_label }}">{{ form.department.label }} *</label>
+                    {{ form.department }}
+                    {% if form.department.errors %}<span class="form-error">{{ form.department.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.position.id_for_label }}">{{ form.position.label }} *</label>
+                    {{ form.position }}
+                    {% if form.position.errors %}<span class="form-error">{{ form.position.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.manager.id_for_label }}">{{ form.manager.label }}</label>
+                    {{ form.manager }}
+                    {% if form.manager.errors %}<span class="form-error">{{ form.manager.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.date_hired.id_for_label }}">{{ form.date_hired.label }} *</label>
+                    {{ form.date_hired }}
+                    {% if form.date_hired.errors %}<span class="form-error">{{ form.date_hired.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.employment_status.id_for_label }}">{{ form.employment_status.label }} *</label>
+                    {{ form.employment_status }}
+                    {% if form.employment_status.errors %}<span class="form-error">{{ form.employment_status.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.employee_type.id_for_label }}">{{ form.employee_type.label }} *</label>
+                    {{ form.employee_type }}
+                    {% if form.employee_type.errors %}<span class="form-error">{{ form.employee_type.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.work_location.id_for_label }}">{{ form.work_location.label }}</label>
+                    {{ form.work_location }}
+                    {% if form.work_location.errors %}<span class="form-error">{{ form.work_location.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.availability_status.id_for_label }}">{{ form.availability_status.label }}</label>
+                    {{ form.availability_status }}
+                    {% if form.availability_status.errors %}<span class="form-error">{{ form.availability_status.errors.0 }}</span>{% endif %}
                 </div>
             </div>
         </section>
 
         <section class="emp-form-section">
-            <div class="emp-form-section-header">
-                <h2>Additional information</h2>
-                <p>Emergency contacts, bio, and social links</p>
-            </div>
-            <div class="emp-form-section-body">
-                <div class="form-grid">
-                    {% for field in form %}
-                    {% if field.name in "emergency_contact_name,emergency_contact_phone,emergency_contact_relationship,emergency_contact,bio,linkedin_url,github_url,twitter_url,website_url" %}
-                    <div class="form-group {% if field.name in 'bio,emergency_contact' %}form-group-full{% endif %}">
-                        <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
-                        {{ field }}
-                        {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
-                    </div>
-                    {% endif %}
-                    {% endfor %}
+            <h2>Additional</h2>
+            <div class="emp-form-fields">
+                <div class="form-group">
+                    <label for="{{ form.emergency_contact_name.id_for_label }}">{{ form.emergency_contact_name.label }}</label>
+                    {{ form.emergency_contact_name }}
+                    {% if form.emergency_contact_name.errors %}<span class="form-error">{{ form.emergency_contact_name.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.emergency_contact_phone.id_for_label }}">{{ form.emergency_contact_phone.label }}</label>
+                    {{ form.emergency_contact_phone }}
+                    {% if form.emergency_contact_phone.errors %}<span class="form-error">{{ form.emergency_contact_phone.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group emp-form-span">
+                    <label for="{{ form.emergency_contact_relationship.id_for_label }}">{{ form.emergency_contact_relationship.label }}</label>
+                    {{ form.emergency_contact_relationship }}
+                    {% if form.emergency_contact_relationship.errors %}<span class="form-error">{{ form.emergency_contact_relationship.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group emp-form-span">
+                    <label for="{{ form.bio.id_for_label }}">{{ form.bio.label }}</label>
+                    {{ form.bio }}
+                    {% if form.bio.errors %}<span class="form-error">{{ form.bio.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.linkedin_url.id_for_label }}">{{ form.linkedin_url.label }}</label>
+                    {{ form.linkedin_url }}
+                    {% if form.linkedin_url.errors %}<span class="form-error">{{ form.linkedin_url.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.github_url.id_for_label }}">{{ form.github_url.label }}</label>
+                    {{ form.github_url }}
+                    {% if form.github_url.errors %}<span class="form-error">{{ form.github_url.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.twitter_url.id_for_label }}">{{ form.twitter_url.label }}</label>
+                    {{ form.twitter_url }}
+                    {% if form.twitter_url.errors %}<span class="form-error">{{ form.twitter_url.errors.0 }}</span>{% endif %}
+                </div>
+                <div class="form-group">
+                    <label for="{{ form.website_url.id_for_label }}">{{ form.website_url.label }}</label>
+                    {{ form.website_url }}
+                    {% if form.website_url.errors %}<span class="form-error">{{ form.website_url.errors.0 }}</span>{% endif %}
                 </div>
             </div>
         </section>
 
         <div class="emp-form-actions">
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary btn-sm">
                 {% if employee %}Save changes{% else %}Save employee{% endif %}
             </button>
-            <a href="{% if employee %}{% url 'employees:detail' employee.pk %}{% else %}{% url 'employees:list' %}{% endif %}" class="btn btn-outline">Cancel</a>
+            <a href="{% if employee %}{% url 'employees:detail' employee.pk %}{% else %}{% url 'employees:list' %}{% endif %}" class="emp-text-link">Cancel</a>
         </div>
     </form>
 
