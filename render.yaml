@@ -8,7 +8,7 @@
 
 services:
   - type: web
-    name: employee-directory
+    name: hr-management-system
     runtime: python
     plan: free
     buildCommand: bash build.sh
@@ -22,9 +22,9 @@ services:
         value: "False"
       # Explicit host + leading-dot form for any *.onrender.com hostname
       - key: ALLOWED_HOSTS
-        value: "directory-d5w5.onrender.com,.onrender.com"
+        value: "hr-management-system-lu8q.onrender.com,.onrender.com"
       - key: CSRF_TRUSTED_ORIGINS
-        value: "https://directory-d5w5.onrender.com"
+        value: "https://hr-management-system-lu8q.onrender.com,https://*.onrender.com"
       # Required for login. In the dashboard: create PostgreSQL → copy
       # Internal Database URL → Environment → DATABASE_URL. Or link the DB
       # so Render injects this automatically.

@@ -25,7 +25,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         "ALLOWED_HOSTS",
-        "localhost,127.0.0.1,directory-d5w5.onrender.com,.onrender.com",
+        "localhost,127.0.0.1,hr-management-system-lu8q.onrender.com,.onrender.com",
     ).split(",")
     if host.strip()
 ]
@@ -34,10 +34,20 @@ CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         "CSRF_TRUSTED_ORIGINS",
-        "http://localhost:8000,http://127.0.0.1:8000,https://directory-d5w5.onrender.com",
+        "http://localhost:8000,http://127.0.0.1:8000,https://hr-management-system-lu8q.onrender.com,https://*.onrender.com",
     ).split(",")
     if origin.strip()
 ]
+
+# Auto-add Render's injected hostname so any future service-name change
+# never causes DisallowedHost without needing a code redeploy.
+_render_hostname = os.getenv("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if _render_hostname:
+    if _render_hostname not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_render_hostname)
+    _render_origin = f"https://{_render_hostname}"
+    if _render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_render_origin)
 
 # Application definition
 INSTALLED_APPS = [
