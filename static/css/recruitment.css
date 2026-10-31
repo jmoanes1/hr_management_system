@@ -23,13 +23,7 @@
 }
 
 .rec-page-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .rec-page-subtitle {
@@ -99,19 +93,11 @@
 }
 
 .rec-overview-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-muted);
-}
-
-.rec-overview-value {
-    font-size: 1.25rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
-    line-height: 1.2;
 }
 
 .rec-list {
@@ -205,14 +191,8 @@
     background: transparent;
 }
 
-.rec-section-header h2,
-.rec-section-header h3 {
+.rec-section-header h2, .rec-section-header h3 {
     margin: 0;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
 }
 
 .rec-section-body {
@@ -233,7 +213,7 @@
 }
 
 .rec-detail-list dt {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -295,7 +275,7 @@
     margin-bottom: 0.625rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--border-subtle);
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.06em;

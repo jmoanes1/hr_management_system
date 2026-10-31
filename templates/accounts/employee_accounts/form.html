@@ -27,7 +27,7 @@
         {% csrf_token %}
 
         {% if form.non_field_errors %}
-        <div class="alert alert-error" style="margin-bottom:1rem">
+        <div class="alert alert-error">
             {% for error in form.non_field_errors %}{{ error }}{% endfor %}
         </div>
         {% endif %}
@@ -102,7 +102,7 @@
                     {% if field.name in "username,account_role,account_active,generate_password,temporary_password,new_password" %}
                     <div class="form-group {% if field.name == 'generate_password' %}form-group-full{% endif %}">
                         {% if field.field.widget.input_type == 'checkbox' %}
-                        <label class="form-check-row" style="display:flex;align-items:center;gap:0.5rem;cursor:pointer">
+                        <label class="form-check-row">
                             {{ field }}
                             <span>{{ field.label }}</span>
                         </label>
@@ -110,7 +110,7 @@
                         <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
                         {{ field }}
                         {% endif %}
-                        {% if field.help_text %}<span class="text-muted text-sm" style="display:block;margin-top:0.25rem">{{ field.help_text }}</span>{% endif %}
+                        {% if field.help_text %}<span class="form-help">{{ field.help_text }}</span>{% endif %}
                         {% if field.errors %}<span class="form-error">{{ field.errors.0 }}</span>{% endif %}
                     </div>
                     {% endif %}

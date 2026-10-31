@@ -19,13 +19,7 @@
 }
 
 .dept-page-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .dept-page-subtitle {

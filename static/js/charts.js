@@ -7,12 +7,49 @@
 
     if (!window.chartData) return;
 
+    const cssVar = (name, fallback) =>
+        getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
+
+    function withAlpha(hex, alpha) {
+        const value = hex.replace('#', '');
+        const full = value.length === 3 ? value.split('').map((c) => c + c).join('') : value;
+        const num = parseInt(full.slice(0, 6), 16);
+        if (Number.isNaN(num)) return hex;
+        return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+    }
+
     const colors = {
-        primary: '#1D4ED8',
-        palette: ['#1D4ED8', '#0F766E', '#047857', '#B45309', '#B91C1C', '#334155', '#2563EB', '#64748B'],
-        grid: getComputedStyle(document.documentElement).getPropertyValue('--border-color').trim() || '#e2e8f0',
-        text: getComputedStyle(document.documentElement).getPropertyValue('--text-muted').trim() || '#94a3b8'
+        primary: cssVar('--color-primary', '#2563EB'),
+        grid: cssVar('--border-color', '#E2E8F0'),
+        text: cssVar('--text-muted', '#94A3B8'),
+        surface: cssVar('--bg-surface', '#FFFFFF'),
+        heading: cssVar('--text-primary', '#0F172A'),
+        // Single-hue navy/blue ramp so charts stay inside the product palette.
+        palette: ['#2563EB', '#1E40AF', '#3B82F6', '#1E293B', '#60A5FA', '#334155', '#93C5FD', '#64748B'],
+        // Employment status reuses the badge semantics from the design system.
+        status: {
+            active: cssVar('--color-success', '#16A34A'),
+            inactive: cssVar('--text-disabled', '#CBD5E1'),
+            on_leave: cssVar('--color-info', '#2563EB'),
+            terminated: cssVar('--color-danger', '#DC2626'),
+        },
     };
+
+    function statusColor(item, index) {
+        return colors.status[item.employment_status] || colors.palette[index % colors.palette.length];
+    }
+
+    // getBoundingClientRect() includes the card's padding, which made the canvas
+    // wider than the space it is drawn in.
+    function contentWidth(canvas) {
+        const parent = canvas.parentElement;
+        if (!parent) return 0;
+        const cs = getComputedStyle(parent);
+        return Math.max(
+            parent.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight),
+            0
+        );
+    }
 
     function drawBarChart(canvasId, labels, values) {
         const canvas = document.getElementById(canvasId);
@@ -20,15 +57,13 @@
 
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = 280 * dpr;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = '280px';
-        ctx.scale(dpr, dpr);
-
-        const W = rect.width;
+        const W = contentWidth(canvas);
         const H = 280;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
+        ctx.scale(dpr, dpr);
 
         if (!labels.length) {
             ctx.clearRect(0, 0, W, H);
@@ -58,19 +93,16 @@
             ctx.stroke();
         }
 
-        // Bars with gradient
+        // Bars
         values.forEach((val, i) => {
             const barH = (val / maxVal) * chartH;
             const x = padding.left + i * (barWidth + gap) + gap / 2;
             const y = padding.top + chartH - barH;
 
-            const grad = ctx.createLinearGradient(x, y, x, y + barH);
-            grad.addColorStop(0, colors.palette[i % colors.palette.length]);
-            grad.addColorStop(1, colors.palette[(i + 1) % colors.palette.length] + '99');
-            ctx.fillStyle = grad;
+            ctx.fillStyle = colors.primary;
             ctx.beginPath();
             if (ctx.roundRect) {
-                ctx.roundRect(x, y, barWidth, barH, [6, 6, 0, 0]);
+                ctx.roundRect(x, y, barWidth, barH, [5, 5, 0, 0]);
             } else {
                 ctx.rect(x, y, barWidth, barH);
             }
@@ -97,15 +129,14 @@
 
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = 260 * dpr;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = '260px';
+        const W = contentWidth(canvas);
+        const H = 260;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
         ctx.scale(dpr, dpr);
 
-        const W = rect.width;
-        const H = 260;
         const padding = { top: 20, right: 20, bottom: 50, left: 50 };
         const chartW = W - padding.left - padding.right;
         const chartH = H - padding.top - padding.bottom;
@@ -140,8 +171,8 @@
 
         if (points.length > 1) {
             const areaGrad = ctx.createLinearGradient(0, padding.top, 0, padding.top + chartH);
-            areaGrad.addColorStop(0, 'rgba(99, 102, 241, 0.25)');
-            areaGrad.addColorStop(1, 'rgba(99, 102, 241, 0)');
+            areaGrad.addColorStop(0, withAlpha(colors.primary, 0.14));
+            areaGrad.addColorStop(1, withAlpha(colors.primary, 0));
             ctx.fillStyle = areaGrad;
             ctx.beginPath();
             ctx.moveTo(points[0].x, padding.top + chartH);
@@ -153,7 +184,7 @@
 
         // Line
         ctx.strokeStyle = colors.primary;
-        ctx.lineWidth = 2.5;
+        ctx.lineWidth = 2;
         ctx.lineJoin = 'round';
         ctx.beginPath();
         points.forEach((p, i) => {
@@ -162,20 +193,22 @@
         ctx.stroke();
 
         // Points & labels
+        const labelStep = Math.ceil(points.length / Math.max(Math.floor(chartW / 52), 1));
         points.forEach((p, i) => {
-            ctx.fillStyle = '#fff';
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 6, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = colors.primary;
+            ctx.fillStyle = colors.surface;
             ctx.beginPath();
             ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
             ctx.fill();
+            ctx.fillStyle = colors.primary;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+            ctx.fill();
 
+            if (i % labelStep !== 0 && i !== points.length - 1) return;
             ctx.fillStyle = colors.text;
-            ctx.font = '10px Inter, sans-serif';
+            ctx.font = '500 10px Inter, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(labels[i] || '', p.x, H - padding.bottom + 15);
+            ctx.fillText((labels[i] || '').split(' ')[0], p.x, H - padding.bottom + 16);
         });
     }
 
@@ -184,18 +217,27 @@
         on_leave: 'On Leave', terminated: 'Terminated'
     };
 
+    function statusKey(item) {
+        return Object.prototype.hasOwnProperty.call(STATUS_LABELS, item.employment_status)
+            ? item.employment_status
+            : 'other';
+    }
+
     function buildStatusLegend(data) {
         const legendEl = document.getElementById('statusLegend');
         if (!legendEl) return;
-        legendEl.innerHTML = data.map((item, i) => `
+        legendEl.innerHTML = data.map((item) => {
+            const key = statusKey(item);
+            return `
             <div class="dash-legend-item">
                 <span class="dash-legend-left">
-                    <span class="dash-legend-dot" style="background:${colors.palette[i % colors.palette.length]}"></span>
+                    <span class="dash-legend-dot dash-legend-dot--${key}"></span>
                     ${STATUS_LABELS[item.employment_status] || item.employment_status}
                 </span>
                 <span class="dash-legend-count">${item.count}</span>
             </div>
-        `).join('');
+        `;
+        }).join('');
     }
 
     function drawDoughnutChart(canvasId, data) {
@@ -204,28 +246,28 @@
 
         if (!data.length) {
             const ctx = canvas.getContext('2d');
-            const rect = canvas.parentElement.getBoundingClientRect();
-            canvas.width = rect.width;
+            const W = contentWidth(canvas);
+            canvas.width = W;
             canvas.height = 220;
+            canvas.style.width = W + 'px';
             ctx.fillStyle = colors.text;
             ctx.font = '14px Inter, sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText('No status data', rect.width / 2, 110);
+            ctx.fillText('No status data', W / 2, 110);
             buildStatusLegend([]);
             return;
         }
 
         const ctx = canvas.getContext('2d');
         const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.parentElement.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = 220 * dpr;
-        canvas.style.width = rect.width + 'px';
-        canvas.style.height = '220px';
+        const W = contentWidth(canvas);
+        const H = 220;
+        canvas.width = W * dpr;
+        canvas.height = H * dpr;
+        canvas.style.width = W + 'px';
+        canvas.style.height = H + 'px';
         ctx.scale(dpr, dpr);
 
-        const W = rect.width;
-        const H = 220;
         const cx = W / 2;
         const cy = H / 2 - 10;
         const radius = 72;
@@ -237,17 +279,20 @@
         let startAngle = -Math.PI / 2;
         data.forEach((item, i) => {
             const sliceAngle = (item.count / total) * Math.PI * 2;
-            ctx.fillStyle = colors.palette[i % colors.palette.length];
+            ctx.fillStyle = statusColor(item, i);
             ctx.beginPath();
             ctx.arc(cx, cy, radius, startAngle, startAngle + sliceAngle);
             ctx.arc(cx, cy, innerRadius, startAngle + sliceAngle, startAngle, true);
             ctx.closePath();
             ctx.fill();
+            ctx.strokeStyle = colors.surface;
+            ctx.lineWidth = 2;
+            ctx.stroke();
             startAngle += sliceAngle;
         });
 
-        ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--text-primary').trim() || '#0f172a';
-        ctx.font = 'bold 22px Inter, sans-serif';
+        ctx.fillStyle = colors.heading;
+        ctx.font = '700 22px Inter, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(total, cx, cy + 4);
         ctx.font = '11px Inter, sans-serif';

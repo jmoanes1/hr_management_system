@@ -107,6 +107,7 @@
 
 .page-intro-card {
     padding: 0 0 1rem;
+    margin-bottom: 1.25rem;
     background: transparent;
     border: none;
     border-radius: 0;
@@ -168,10 +169,6 @@
 
 .summary-value {
     display: block;
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--text-primary);
 }
 
 .summary-note {
@@ -283,7 +280,7 @@
 }
 .filter-group label.filter-label {
     display: block;
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -306,7 +303,7 @@
     border: 1px solid var(--border-color);
     border-radius: 4px;
     background: var(--bg-body);
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-family: inherit;
 }
 
@@ -512,7 +509,7 @@
     padding: 0.25rem 0.5rem;
     background: var(--text-primary);
     color: var(--bg-surface);
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     border-radius: 4px;
     white-space: nowrap;
     pointer-events: none;

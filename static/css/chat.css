@@ -14,12 +14,7 @@
 
 .chat-page-header h1,
 .chat-page-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .chat-page-subtitle {
@@ -85,7 +80,7 @@
 
 .chat-sender {
     display: block;
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     margin-bottom: 0.25rem;
     letter-spacing: 0.02em;
@@ -126,7 +121,7 @@
 .chat-welcome h3 {
     margin: 0 0 0.35rem;
     font-size: 1.125rem;
-    font-weight: 650;
+    font-weight: 600;
     color: var(--text-primary);
 }
 
@@ -157,7 +152,7 @@
 }
 
 .chat-suggestion:hover {
-    border-color: rgba(79, 70, 229, 0.35);
+    border-color: rgba(37, 99, 235, 0.35);
     color: var(--color-primary);
     background: var(--color-primary-light);
 }

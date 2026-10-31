@@ -27,13 +27,7 @@
 }
 
 .perf-page-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .perf-page-subtitle {
@@ -122,7 +116,7 @@
 }
 
 .perf-stat-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -131,11 +125,6 @@
 }
 
 .perf-stat-value {
-    font-size: 1.25rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
-    line-height: 1.2;
     font-variant-numeric: tabular-nums;
 }
 
@@ -167,11 +156,6 @@
 
 .perf-section-header h2 {
     margin: 0;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--text-muted);
 }
 
 /* Lists */
@@ -268,7 +252,7 @@ a.perf-list-title:hover {
 
 .perf-rating {
     font-size: 0.9375rem;
-    font-weight: 650;
+    font-weight: 600;
     letter-spacing: -0.02em;
     color: var(--text-primary);
     font-variant-numeric: tabular-nums;
@@ -315,7 +299,7 @@ a.perf-list-title:hover {
 }
 
 .perf-detail-meta dt {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;

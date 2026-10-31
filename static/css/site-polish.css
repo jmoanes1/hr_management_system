@@ -3,19 +3,7 @@
    Loaded after theme-directory.css
    ============================================ */
 
-:root {
-    --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.04);
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
-    --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.1);
-    --shadow-glow: 0 0 0 2px rgba(79, 70, 229, 0.15);
 
-    --space-page: 1.75rem;
-    --space-section: 1.5rem;
-    --space-card: 1.25rem;
-
-    --topbar-height: 56px;
-}
 
 /* ===== Base typography & rhythm ===== */
 body {
@@ -25,14 +13,14 @@ body {
 }
 
 ::selection {
-    background: rgba(79, 70, 229, 0.2);
-    color: #1F2937;
+    background: rgba(37, 99, 235, 0.2);
+    color: var(--text-primary);
 }
 
 /* Custom scrollbar — subtle */
 * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(107, 114, 128, 0.35) transparent;
+    scrollbar-color: rgba(71, 85, 105, 0.35) transparent;
 }
 
 *::-webkit-scrollbar {
@@ -41,12 +29,12 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-    background: rgba(107, 114, 128, 0.3);
+    background: rgba(71, 85, 105, 0.3);
     border-radius: 999px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
-    background: rgba(107, 114, 128, 0.45);
+    background: rgba(71, 85, 105, 0.45);
 }
 
 a {
@@ -73,16 +61,7 @@ a:hover {
     gap: var(--space-section);
 }
 
-/* Unified page titles — sentence case, no uppercase chrome */
-.page-header h1,
-.dept-page-header-main h1,
-.page-intro-copy h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    text-transform: none;
-    color: var(--text-primary);
-}
+/* Page titles are defined once in design-system.css. */
 
 .page-header .text-muted,
 .dept-page-subtitle,
@@ -183,8 +162,7 @@ a:hover {
 .topbar .topbar-icon-btn,
 .topbar .theme-toggle,
 .topbar .notification-btn,
-.topbar .topbar-birthday-btn,
-.topbar .user-menu-btn {
+.topbar .topbar-birthday-btn {
     width: 34px;
     height: 34px;
     padding: 0;
@@ -220,7 +198,6 @@ a:hover {
 .topbar .theme-toggle:hover,
 .topbar .notification-btn:hover,
 .topbar .topbar-birthday-btn:hover,
-.topbar .user-menu-btn:hover,
 .topbar .notification-btn[aria-expanded="true"],
 .topbar .user-menu-btn[aria-expanded="true"] {
     background: var(--bg-sidebar-hover);
@@ -237,27 +214,6 @@ a:hover {
     outline-offset: 2px;
 }
 
-.topbar .notification-count {
-    position: absolute;
-    top: 3px;
-    right: 3px;
-    min-width: 15px;
-    height: 15px;
-    padding: 0 4px;
-    background: var(--color-primary);
-    color: #fff;
-    border: 2px solid var(--bg-body);
-    border-radius: 999px;
-    font-size: 0.5625rem;
-    font-weight: 700;
-    line-height: 1;
-    letter-spacing: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-}
-
 .topbar .user-menu {
     position: relative;
     padding-left: 0;
@@ -265,18 +221,12 @@ a:hover {
     border-left: none;
 }
 
-.topbar .user-menu-btn .user-avatar {
-    width: 26px;
-    height: 26px;
-    font-size: 0.625rem;
-}
-
 .topbar-mobile-search {
     display: none;
 }
 
 .topbar .topbar-birthday-btn .notification-count {
-    background: #d97706;
+    background: var(--color-warning);
 }
 
 .notification-dropdown-header {
@@ -447,7 +397,7 @@ a:hover {
 }
 
 .data-table th {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.06em;
     text-transform: uppercase;
@@ -460,7 +410,7 @@ a:hover {
 }
 
 .data-table tbody tr:nth-child(even) td {
-    background: #F9FAFB;
+    background: var(--bg-body);
 }
 
 /* ===== Alerts & messages ===== */
@@ -471,28 +421,28 @@ a:hover {
 }
 
 .alert-success {
-    background: rgba(16, 185, 129, 0.1);
-    color: #047857;
-    border-color: rgba(16, 185, 129, 0.25);
+    background: rgba(22, 163, 74, 0.1);
+    color: var(--color-success-strong);
+    border-color: rgba(22, 163, 74, 0.25);
 }
 
 .alert-error,
 .alert-danger {
-    background: rgba(239, 68, 68, 0.1);
-    color: #B91C1C;
-    border-color: rgba(239, 68, 68, 0.25);
+    background: rgba(220, 38, 38, 0.1);
+    color: var(--color-danger-strong);
+    border-color: rgba(220, 38, 38, 0.25);
 }
 
 .alert-info {
-    background: rgba(6, 182, 212, 0.1);
-    color: #0E7490;
-    border-color: rgba(6, 182, 212, 0.25);
+    background: rgba(37, 99, 235, 0.1);
+    color: var(--color-primary-active);
+    border-color: rgba(37, 99, 235, 0.25);
 }
 
 .alert-warning {
-    background: rgba(245, 158, 11, 0.1);
-    color: #B45309;
-    border-color: rgba(245, 158, 11, 0.25);
+    background: rgba(217, 119, 6, 0.1);
+    color: var(--color-warning-strong);
+    border-color: rgba(217, 119, 6, 0.25);
 }
 
 /* ===== Empty states ===== */
@@ -634,47 +584,11 @@ a:hover {
 }
 
 /* ===== Dark mode — true dark surfaces (overrides :root light tokens) ===== */
-[data-theme="dark"] {
-    --color-primary: #6366F1;
-    --color-primary-hover: #818CF8;
-    --color-primary-light: rgba(99, 102, 241, 0.15);
-    --color-primary-glow: rgba(99, 102, 241, 0.25);
-    --color-accent: #22D3EE;
-    --color-accent-soft: #67E8F9;
-    --color-gold: #6366F1;
-    --color-teal: #06B6D4;
 
-    --bg-body: #0B0F14;
-    --bg-surface: #151A22;
-    --bg-surface-elevated: #1C2330;
-    --bg-card: #1C2330;
-    --bg-sidebar: #11151C;
-    --bg-sidebar-solid: #11151C;
-    --bg-sidebar-hover: rgba(99, 102, 241, 0.1);
-    --bg-sidebar-active: rgba(99, 102, 241, 0.18);
-    --bg-input: #1C2330;
-    --bg-glass: rgba(17, 21, 28, 0.95);
-
-    --text-primary: #F1F5F9;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
-    --text-on-card: #F1F5F9;
-    --text-sidebar: #94A3B8;
-    --text-sidebar-active: #E0E7FF;
-
-    --border-color: #2A3344;
-    --border-subtle: #222A38;
-
-    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.25);
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.45);
-    --shadow-glow: 0 0 0 2px rgba(99, 102, 241, 0.25);
-}
 
 [data-theme="dark"] ::selection {
-    background: rgba(99, 102, 241, 0.35);
-    color: #F1F5F9;
+    background: rgba(37, 99, 235, 0.35);
+    color: var(--bg-muted);
 }
 
 [data-theme="dark"] * {
@@ -686,12 +600,12 @@ a:hover {
 }
 
 [data-theme="dark"] .topbar {
-    background: rgba(17, 21, 28, 0.92);
+    background: rgba(30, 41, 59, 0.92);
     border-bottom-color: var(--border-subtle);
 }
 
 [data-theme="dark"] .topbar .notification-count {
-    border-color: #11151c;
+    border-color: var(--border-subtle);
 }
 
 [data-theme="dark"] .data-table tbody tr:nth-child(even) td {

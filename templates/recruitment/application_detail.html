@@ -126,7 +126,7 @@
                 <p class="text-muted text-sm">Mark as hired to auto-generate onboarding tasks.</p>
                 {% endif %}
 
-                <form method="post" class="form-grid" style="margin-top:1rem;border-top:1px solid var(--border-subtle);padding-top:1rem">
+                <form method="post" class="form-grid section-divider">
                     {% csrf_token %}
                     <input type="hidden" name="action" value="task">
                     <div class="form-group form-group-full">

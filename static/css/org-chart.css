@@ -18,12 +18,7 @@
 }
 
 .org-page-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .org-page-subtitle {
@@ -91,21 +86,12 @@
 
 .org-overview-label,
 .org-stat-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-muted);
     margin: 0;
-}
-
-.org-overview-value,
-.org-stat-value {
-    font-size: 1.25rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
-    line-height: 1.2;
 }
 
 .org-chart-panel {

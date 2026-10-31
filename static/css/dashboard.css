@@ -3,16 +3,6 @@
    ============================================ */
 
 .dashboard-page {
-    --dash-primary: var(--color-primary);
-    --dash-success: #10B981;
-    --dash-danger: #EF4444;
-    --dash-card-bg: var(--bg-surface);
-    --dash-card-border: var(--border-subtle);
-    --dash-text: var(--text-primary);
-    --dash-text-secondary: var(--text-muted);
-    --dash-radius: 12px;
-    --dash-shadow: none;
-
     display: flex;
     flex-direction: column;
     gap: 1.75rem;
@@ -44,13 +34,7 @@
 }
 
 .dash-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
     margin: 0;
-    color: var(--dash-text);
-    text-transform: none;
 }
 
 .dash-header-actions {
@@ -100,7 +84,7 @@
 }
 
 .dash-overview-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     color: var(--dash-text-secondary);
     letter-spacing: 0.04em;
@@ -108,16 +92,8 @@
     line-height: 1.35;
 }
 
-.dash-overview-value {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    line-height: 1.2;
-    color: var(--dash-text);
-}
-
 .dash-overview-trend {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     line-height: 1.3;
 }
@@ -157,7 +133,7 @@
 
 .dash-nav-link:hover {
     color: var(--color-primary);
-    border-color: rgba(79, 70, 229, 0.35);
+    border-color: rgba(37, 99, 235, 0.35);
     background: var(--color-primary-light);
 }
 
@@ -169,11 +145,6 @@
 }
 
 .dash-section-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--dash-text-secondary);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     margin: 0;
 }
 
@@ -265,11 +236,18 @@
 }
 
 .dash-legend-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     flex-shrink: 0;
+    background: var(--color-primary);
 }
+
+.dash-legend-dot--active { background: var(--color-success); }
+.dash-legend-dot--inactive { background: var(--text-disabled); }
+.dash-legend-dot--on_leave { background: var(--color-info); }
+.dash-legend-dot--terminated { background: var(--color-danger); }
+.dash-legend-dot--other { background: var(--color-primary); }
 
 .dash-legend-count {
     font-weight: 600;
@@ -374,7 +352,7 @@
 }
 
 .dash-announce-item time {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     color: var(--text-muted);
 }
 
@@ -470,10 +448,6 @@
 @media (max-width: 720px) {
     .dashboard-page {
         gap: 1.35rem;
-    }
-
-    .dash-header-main h1 {
-        font-size: 1.2rem;
     }
 
     .dash-overview-grid {

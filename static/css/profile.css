@@ -18,11 +18,6 @@
 
 .account-profile-header h1 {
     margin: 0;
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    text-transform: none;
-    color: var(--text-primary);
 }
 
 .account-profile-subtitle {
@@ -39,13 +34,6 @@
 
 .account-profile-page .page-header {
     margin-bottom: 1.25rem;
-}
-
-.account-profile-page .page-header h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    text-transform: none;
 }
 
 .account-profile-card {
@@ -116,11 +104,6 @@
 }
 
 .account-profile-section-title {
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--text-muted);
     margin-bottom: 0.875rem;
 }
 
@@ -283,13 +266,7 @@
 }
 
 .prof-header-copy h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .prof-header-subtitle {
@@ -375,7 +352,7 @@
 }
 
 .prof-dl dt {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;

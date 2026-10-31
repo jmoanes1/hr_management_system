@@ -1,64 +1,10 @@
 /* ============================================
    Employment Directory — global light theme
-   Palette: Primary #4F46E5, Accent #06B6D4
+   Palette: Primary var(--color-primary), Accent var(--color-primary)
    ============================================ */
 
-:root {
-    --color-primary: #4F46E5;
-    --color-primary-hover: #4338CA;
-    --color-primary-light: rgba(79, 70, 229, 0.08);
-    --color-primary-glow: rgba(79, 70, 229, 0.18);
-    --color-secondary: #06B6D4;
-    --color-secondary-hover: #0891B2;
-    --color-secondary-light: rgba(6, 182, 212, 0.1);
-    --color-accent: #06B6D4;
-    --color-accent-soft: #22D3EE;
-    --color-gold: #4F46E5;
-    --color-teal: #06B6D4;
-    --color-linkedin: #0077B5;
-    --color-success: #10B981;
-    --color-success-light: rgba(16, 185, 129, 0.1);
-    --color-warning: #F59E0B;
-    --color-warning-light: rgba(245, 158, 11, 0.1);
-    --color-danger: #EF4444;
-    --color-error: #EF4444;
-    --color-danger-light: rgba(239, 68, 68, 0.1);
-    --color-info: #06B6D4;
 
-    --bg-body: #F8FAFC;
-    --bg-body-gradient: none;
-    --bg-surface: #FFFFFF;
-    --bg-surface-elevated: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --bg-sidebar: #FFFFFF;
-    --bg-sidebar-solid: #FFFFFF;
-    --bg-sidebar-hover: rgba(79, 70, 229, 0.06);
-    --bg-sidebar-active: rgba(79, 70, 229, 0.1);
-    --bg-input: #FFFFFF;
-    --bg-glass: rgba(255, 255, 255, 0.92);
 
-    --text-primary: #1F2937;
-    --text-secondary: #6B7280;
-    --text-muted: #9CA3AF;
-    --text-inverse: #FFFFFF;
-    --text-on-card: #1F2937;
-    --text-sidebar: #6B7280;
-    --text-sidebar-active: #4F46E5;
-
-    --border-color: #E5E7EB;
-    --border-subtle: #F1F5F9;
-    --border-radius: 10px;
-    --border-radius-md: 12px;
-    --border-radius-lg: 14px;
-    --border-radius-xl: 16px;
-    --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
-    --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
-    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
-    --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.1);
-    --shadow-xl: 0 12px 32px rgba(15, 23, 42, 0.12);
-    --shadow-glow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-    --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.04);
-}
 
 /* ===== Layout surfaces ===== */
 body {
@@ -233,10 +179,10 @@ body {
 }
 
 /* ===== Badges ===== */
-.badge-active { background: rgba(16, 185, 129, 0.12); color: #059669; }
-.badge-inactive { background: #F3F4F6; color: #6B7280; }
-.badge-on_leave { background: rgba(245, 158, 11, 0.12); color: #D97706; }
-.badge-terminated { background: rgba(239, 68, 68, 0.12); color: #DC2626; }
+.badge-active { background: rgba(22, 163, 74, 0.12); color: var(--color-success-strong); }
+.badge-inactive { background: var(--bg-muted); color: var(--text-secondary); }
+.badge-on_leave { background: rgba(217, 119, 6, 0.12); color: var(--color-warning); }
+.badge-terminated { background: rgba(220, 38, 38, 0.12); color: var(--color-danger); }
 
 /* ===== Pagination ===== */
 .pagination-page {
@@ -307,11 +253,6 @@ body {
 }
 
 .dir-page-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    text-transform: none;
-    color: var(--text-primary);
     margin: 0;
 }
 
@@ -459,7 +400,7 @@ body {
     grid-template-columns: 28px 1fr 1fr 1fr 140px 52px;
     gap: 1rem;
     padding: 0 0 0.625rem 0.5rem;
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -551,7 +492,7 @@ body {
 
 .dir-emp-card-role {
     font-size: 0.75rem;
-    color: #6E6E73;
+    color: var(--text-muted);
     margin: 0;
     line-height: 1.4;
 }
@@ -564,11 +505,11 @@ body {
 
 .dir-emp-card-company-name {
     display: block;
-    font-size: 0.625rem;
+    font-size: var(--text-help);
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: #1C1C1E;
+    color: var(--text-primary);
     line-height: 1.2;
 }
 
@@ -578,12 +519,12 @@ body {
     margin-left: auto;
     margin-bottom: 0.25rem;
     border-radius: 6px;
-    background: linear-gradient(135deg, #06B6D4, #0891B2);
+    background: var(--color-primary);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 0.5rem;
-    font-weight: 800;
+    font-weight: 700;
     color: #fff;
     letter-spacing: -0.02em;
 }
@@ -594,7 +535,7 @@ body {
     justify-content: space-between;
     gap: 0.75rem;
     padding-top: 0.25rem;
-    border-top: 1px solid #F0F0F2;
+    border-top: 1px solid var(--border-color);
 }
 
 .dir-emp-actions {
@@ -608,8 +549,8 @@ body {
     align-items: center;
     gap: 0.25rem;
     text-decoration: none;
-    color: #6E6E73;
-    font-size: 0.5625rem;
+    color: var(--text-muted);
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.02em;
     text-transform: uppercase;
@@ -651,9 +592,9 @@ body {
 }
 
 .dir-emp-card .avatar {
-    background: #F0F0F2;
-    color: #1C1C1E;
-    border: 1px solid #E8E8EC;
+    background: var(--border-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 .dir-emp-qr {
@@ -662,7 +603,7 @@ body {
     border-radius: 6px;
     overflow: hidden;
     flex-shrink: 0;
-    border: 1px solid #E8E8EC;
+    border: 1px solid var(--border-color);
 }
 
 .dir-emp-qr img {

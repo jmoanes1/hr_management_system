@@ -25,13 +25,7 @@
 }
 
 .dir-page-title {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    text-transform: none;
-    color: var(--text-primary);
     margin: 0;
-    line-height: 1.25;
 }
 
 .dir-page-subtitle {
@@ -69,19 +63,11 @@
 }
 
 .dir-overview-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-muted);
-}
-
-.dir-overview-value {
-    font-size: 1.25rem;
-    font-weight: 650;
-    letter-spacing: -0.03em;
-    color: var(--text-primary);
-    line-height: 1.2;
 }
 
 /* Search + filters + view */
@@ -206,7 +192,7 @@
 }
 
 .dir-filters-panel .filter-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-help);
     font-weight: 600;
     letter-spacing: 0.04em;
     text-transform: uppercase;
@@ -250,7 +236,7 @@
 
 .dir-alpha-letter {
     font-size: 0.75rem;
-    font-weight: 650;
+    font-weight: 600;
     letter-spacing: 0.04em;
     color: var(--text-muted);
     line-height: 1.2;
@@ -387,7 +373,7 @@
 }
 
 .emp-table-row:hover {
-    background: var(--bg-sidebar-hover, rgba(79, 70, 229, 0.06));
+    background: var(--bg-sidebar-hover, rgba(37, 99, 235, 0.06));
 }
 
 .emp-table-row:focus-visible {
@@ -477,13 +463,7 @@
 }
 
 .emp-page-header-main h1 {
-    font-size: 1.375rem;
-    font-weight: 650;
-    letter-spacing: -0.02em;
-    line-height: 1.25;
     margin: 0;
-    color: var(--text-primary);
-    text-transform: none;
 }
 
 .emp-page-subtitle {
