@@ -55,7 +55,10 @@
     color: var(--color-primary);
 }
 
-/* KPI strip — no wrapping card */
+/* KPI strip. base.html links this file BEFORE design-system.css, whose rules
+   for these same classes win the conflicts, so the cells paint as padded
+   cards. Only the insets here that outrank a single class still apply — and
+   an inset that differs between cells moves that cell's number. */
 .dash-overview-grid {
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -70,17 +73,12 @@
     flex-direction: column;
     gap: 0.2rem;
     min-width: 0;
-    padding: 0 1rem;
-    border-right: 1px solid var(--dash-card-border);
 }
 
-.dash-overview-stat:first-child {
-    padding-left: 0;
-}
-
-.dash-overview-stat:last-child {
-    border-right: none;
-    padding-right: 0;
+/* One inset for every cell — no first/last/nth exceptions, so the values
+   start at the same offset across the row. */
+.dashboard-page .dash-overview-grid .dash-overview-stat {
+    padding: var(--space-5);
 }
 
 .dash-overview-label {
@@ -90,12 +88,20 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     line-height: 1.35;
+    /* Two-line band (2 x 1.35em) — tall enough that the 32px icon and a
+       wrapped label can never push this cell's value off the shared line. */
+    min-height: 2.7em;
+}
+
+.dash-overview-value {
+    font-variant-numeric: tabular-nums;
 }
 
 .dash-overview-trend {
     font-size: var(--text-help);
     font-weight: 600;
     line-height: 1.3;
+    font-variant-numeric: tabular-nums;
 }
 
 .dash-overview-trend--up {
@@ -407,25 +413,6 @@
         gap: 1rem 0;
     }
 
-    .dash-overview-stat {
-        border-right: 1px solid var(--dash-card-border);
-        padding: 0 1rem;
-    }
-
-    .dash-overview-stat:nth-child(3n) {
-        border-right: none;
-        padding-right: 0;
-    }
-
-    .dash-overview-stat:nth-child(3n + 1) {
-        padding-left: 0;
-    }
-
-    .dash-overview-stat:nth-child(n + 4) {
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--dash-card-border);
-    }
-
     .dash-charts-row {
         grid-template-columns: 1fr 1fr;
     }
@@ -452,24 +439,6 @@
 
     .dash-overview-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .dash-overview-stat,
-    .dash-overview-stat:nth-child(3n),
-    .dash-overview-stat:nth-child(3n + 1) {
-        padding: 0.5rem 0.75rem 0.5rem 0;
-        border-right: 1px solid var(--dash-card-border);
-        border-top: none;
-    }
-
-    .dash-overview-stat:nth-child(2n) {
-        border-right: none;
-        padding-right: 0;
-    }
-
-    .dash-overview-stat:nth-child(n + 3) {
-        padding-top: 0.75rem;
-        border-top: 1px solid var(--dash-card-border);
     }
 
     .dash-charts-row,
