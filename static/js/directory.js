@@ -174,9 +174,9 @@
                     <p class="dir-person-role">${escapeHtml(role)}</p>
                 </div>
                 <div class="dir-person-meta">
-                    <span class="dir-person-id">${escapeHtml(emp.employee_id || '')}</span>
-                    <span class="badge badge-${statusCode}">${status}</span>
                     ${email}
+                    <span class="badge badge-${statusCode}">${status}</span>
+                    <span class="dir-person-id">${escapeHtml(emp.employee_id || '')}</span>
                 </div>
             </article>`;
     }

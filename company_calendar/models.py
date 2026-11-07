@@ -1,15 +1,16 @@
-"""Company calendar entries — holidays and company events."""
+"""Company calendar entries — holidays, company events, and birthdays."""
 
 from django.conf import settings
 from django.db import models
 
 
 class CalendarEntry(models.Model):
-    """A single holiday or company event on the shared calendar."""
+    """A single holiday, company event, or birthday on the shared calendar."""
 
     class EventType(models.TextChoices):
         HOLIDAY = "holiday", "Holiday"
         COMPANY_EVENT = "company_event", "Company Event"
+        BIRTHDAY = "birthday", "Birthday"
 
     title = models.CharField(max_length=200)
     date = models.DateField(db_index=True)

@@ -11,10 +11,10 @@
         <p class="dir-person-role">{{ emp.position.title }} · {{ emp.department.name }}</p>
     </div>
     <div class="dir-person-meta">
-        <span class="dir-person-id">{{ emp.employee_id }}</span>
-        <span class="badge badge-{{ emp.employment_status }}">{{ emp.get_employment_status_display }}</span>
         {% if emp.email %}
         <a href="mailto:{{ emp.email }}" class="dir-person-email" title="Email {{ emp.full_name }}">{{ emp.email }}</a>
         {% endif %}
+        <span class="badge badge-{{ emp.employment_status }}">{{ emp.get_employment_status_display }}</span>
+        <span class="dir-person-id">{{ emp.employee_id }}</span>
     </div>
 </article>

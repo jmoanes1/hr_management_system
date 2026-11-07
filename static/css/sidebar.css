@@ -33,7 +33,6 @@
     border-radius: 11px;
     background: var(--color-primary);
     color: var(--text-inverse);
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.22);
 }
 
 .app-logo-mark svg {
@@ -393,7 +392,7 @@
 }
 
 [data-theme="dark"] .app-logo-mark {
-    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.3);
+    box-shadow: none;
 }
 
 [data-theme="dark"] .sidebar-user-card {

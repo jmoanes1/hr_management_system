@@ -24,5 +24,5 @@ class CalendarEntryForm(StyledFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Mixin already set a label-based placeholder; replace with clearer copy.
-        self.fields["title"].widget.attrs["placeholder"] = "Holiday or event name"
+        self.fields["title"].widget.attrs["placeholder"] = "Holiday, event, or birthday name"
         self.fields["description"].widget.attrs["placeholder"] = "Optional details for employees"

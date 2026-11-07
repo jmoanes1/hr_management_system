@@ -333,7 +333,7 @@ a:hover {
 .app-logo {
     display: inline-flex;
     align-items: center;
-    gap: 0.625rem;
+    gap: 0.75rem;
     text-decoration: none;
     color: var(--text-primary);
     min-width: 0;
@@ -343,42 +343,56 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
-    border-radius: var(--radius-control);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: var(--color-primary);
     color: #FFFFFF;
     flex-shrink: 0;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 .app-logo-mark svg {
-    width: 19px;
-    height: 19px;
+    width: 22px;
+    height: 22px;
 }
 
 .app-logo-copy {
     display: flex;
     flex-direction: column;
+    gap: 0.125rem;
     min-width: 0;
 }
 
 .app-logo-title {
     font-size: 0.9375rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-weight: 600;
+    letter-spacing: -0.025em;
     color: var(--text-primary);
-    line-height: 1.2;
+    line-height: 1.25;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .app-logo-tagline {
-    font-size: var(--text-help);
-    font-weight: 500;
+    font-size: 0.625rem;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
     color: var(--text-muted);
+}
+
+.app-logo--compact .app-logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+}
+
+.app-logo--compact .app-logo-mark svg {
+    width: 19px;
+    height: 19px;
 }
 
 .sidebar-collapse-btn {
@@ -2005,6 +2019,7 @@ textarea.form-control:focus {
     flex-wrap: wrap;
     gap: 0.625rem 1rem;
     align-items: center;
+    justify-content: flex-end;
     justify-self: end;
 }
 
@@ -2246,6 +2261,37 @@ textarea.form-control:focus {
     display: flex;
     justify-content: center;
     margin-bottom: 1.5rem;
+}
+
+.auth-logo .app-logo {
+    gap: 0.875rem;
+}
+
+.auth-logo .app-logo-mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+}
+
+.auth-logo .app-logo-mark svg {
+    width: 26px;
+    height: 26px;
+}
+
+.auth-logo .app-logo-copy {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.auth-logo .app-logo-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+}
+
+.auth-logo .app-logo-tagline {
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
 }
 
 .auth-header {

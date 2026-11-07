@@ -16,6 +16,7 @@ from company_calendar.utils import (
     build_month_grid,
     get_calendar_items_for_month,
     get_todays_events,
+    get_upcoming_birthdays,
     get_upcoming_events,
     search_calendar_items,
     shift_month,
@@ -74,6 +75,7 @@ def calendar_view(request):
         CalendarEntry.objects.filter(is_active=True),
         search=search,
     )
+    upcoming_birthdays = get_upcoming_birthdays(today, search)
 
     month_label = date(year, month, 1).strftime("%B %Y")
     can_manage = request.user.can_manage_calendar()
@@ -91,6 +93,7 @@ def calendar_view(request):
         "search_results": search_results,
         "todays_events": todays_events,
         "upcoming_events": upcoming_events,
+        "upcoming_birthdays": upcoming_birthdays,
         "can_manage": can_manage,
         "prev_url": f"?{_calendar_querystring(prev_year, prev_month, search)}",
         "next_url": f"?{_calendar_querystring(next_year, next_month, search)}",
@@ -103,7 +106,11 @@ def calendar_view(request):
 
 @calendar_manager_required
 def calendar_entry_create_view(request):
-    form = CalendarEntryForm(request.POST or None)
+    initial = {}
+    requested_type = request.GET.get("type", "")
+    if requested_type in CalendarEntry.EventType.values:
+        initial["event_type"] = requested_type
+    form = CalendarEntryForm(request.POST or None, initial=initial)
     if request.method == "POST" and form.is_valid():
         entry = form.save(commit=False)
         entry.created_by = request.user

@@ -78,6 +78,7 @@ def entry_to_display(entry: CalendarEntry) -> CalendarDisplayItem:
         date=entry.date,
         description=entry.description or "",
         entry_id=entry.pk,
+        icon="🎂" if entry.event_type == CalendarEntry.EventType.BIRTHDAY else "",
     )
 
 
@@ -159,6 +160,24 @@ def shift_month(year: int, month: int, delta: int):
         month -= 12
         year += 1
     return year, month
+
+
+def get_upcoming_birthdays(
+    today: date,
+    search: str = "",
+    *,
+    days_ahead: int = 365,
+    limit: int = 6,
+) -> list[tuple[Employee, date]]:
+    """Upcoming employee birthdays as (employee, next_date), sorted by date."""
+    upcoming = []
+    horizon = today + timedelta(days=days_ahead)
+    for employee in get_employees_with_birthdays(search):
+        next_date = next_birthday_date(employee.date_of_birth, today + timedelta(days=1))
+        if next_date <= horizon:
+            upcoming.append((employee, next_date))
+    upcoming.sort(key=lambda pair: (pair[1], pair[0].first_name))
+    return upcoming[:limit]
 
 
 def get_todays_events(today: date, entries_qs, search: str = "") -> list[CalendarDisplayItem]:

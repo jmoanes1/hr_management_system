@@ -16,6 +16,7 @@
         </div>
         {% if can_manage %}
         <div class="cal-page-header-actions">
+            <a href="{% url 'company_calendar:create' %}?type=birthday" class="btn btn-outline btn-sm">Add birthday</a>
             <a href="{% url 'company_calendar:create' %}" class="btn btn-primary btn-sm">Add entry</a>
         </div>
         {% endif %}
@@ -163,6 +164,28 @@
                 </ul>
                 {% else %}
                 <p class="cal-sidebar-empty">Nothing scheduled today.</p>
+                {% endif %}
+            </section>
+
+            <section class="cal-sidebar-section">
+                <h3>Birthdays</h3>
+                {% if upcoming_birthdays %}
+                <ul class="cal-upcoming-list">
+                    {% for employee, birthday_date in upcoming_birthdays %}
+                    <li class="cal-upcoming-item">
+                        <span class="cal-upcoming-date">{{ birthday_date|date:"M j" }}</span>
+                        <div>
+                            <p class="cal-upcoming-title">
+                                <span class="cal-event-icon" aria-hidden="true">🎂</span>
+                                <a href="{% url 'employees:detail' employee.pk %}" class="cal-text-link" title="View {{ employee.full_name }}">{{ employee.first_name }}</a>
+                            </p>
+                            <span class="cal-upcoming-meta">Birthday</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="cal-sidebar-empty">No birthdays on file.</p>
                 {% endif %}
             </section>
 
