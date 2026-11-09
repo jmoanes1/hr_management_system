@@ -225,8 +225,13 @@ class CustomPasswordResetView(PasswordResetEmailContextMixin, PasswordResetView)
     def form_valid(self, form):
         try:
             return super().form_valid(form)
-        except Exception:
-            logger.exception("Password reset email could not be delivered via Brevo")
+        except Exception as exc:
+            # Log detailed error for server-side debugging (never expose to user)
+            logger.exception(
+                "Password reset email delivery failed: %s",
+                str(exc)[:200],  # Truncate to avoid leaking sensitive data
+            )
+            # Show friendly error message to user (no credentials or internals)
             messages.error(
                 self.request,
                 "We could not send the reset email right now. "

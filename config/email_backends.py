@@ -1,4 +1,4 @@
-"""Email backends with Brevo support and local development fallback."""
+"""Email backends with Brevo, Resend, and local development fallback."""
 
 import logging
 
@@ -8,6 +8,7 @@ from django.core.mail.backends.console import EmailBackend as ConsoleEmailBacken
 from django.core.mail.backends.smtp import EmailBackend as SmtpEmailBackend
 
 from config.brevo_email_backend import BrevoAPIEmailBackend
+from config.resend_email_backend import ResendEmailBackend
 
 logger = logging.getLogger(__name__)
 
@@ -43,18 +44,32 @@ def _brevo_api_backend(fail_silently=False):
     return None
 
 
+def _resend_backend(fail_silently=False):
+    """Resend REST API (HTTP — works on Render Free tier where SMTP is blocked)."""
+    api_key = getattr(settings, "RESEND_API_KEY", "")
+    if api_key:
+        return ResendEmailBackend(fail_silently=fail_silently)
+    return None
+
+
 def _should_use_console_fallback() -> bool:
     return getattr(settings, "EMAIL_CONSOLE_FALLBACK", False) and settings.DEBUG
 
 
 class ResilientEmailBackend(BaseEmailBackend):
     """
-    Deliver mail through Brevo SMTP (primary). Optionally try the Brevo API,
-    then console output only when EMAIL_CONSOLE_FALLBACK=True in DEBUG.
+    Deliver mail through the best available backend.
+
+    Order of preference:
+    1. Resend HTTP API (works on Render Free — no SMTP port needed)
+    2. Brevo SMTP relay
+    3. Brevo REST API
+    4. Console fallback (only when EMAIL_CONSOLE_FALLBACK=True in DEBUG)
     """
 
     def __init__(self, *args, fail_silently=False, **kwargs):
         super().__init__(fail_silently=fail_silently, **kwargs)
+        self._resend = _resend_backend(fail_silently=fail_silently)
         self._smtp = _brevo_smtp_backend(fail_silently=fail_silently)
         self._api = _brevo_api_backend(fail_silently=fail_silently)
         self._console = VerboseConsoleEmailBackend(fail_silently=fail_silently)
@@ -65,6 +80,20 @@ class ResilientEmailBackend(BaseEmailBackend):
 
         errors = []
 
+        # 1. Try Resend HTTP API first (best for Render Free — no SMTP port)
+        if self._resend:
+            try:
+                sent = self._resend.send_messages(email_messages)
+                if sent:
+                    logger.info("Email sent via Resend API.")
+                    print("[Email] Sent via Resend API.")
+                    return sent
+            except Exception as exc:
+                errors.append(f"Resend: {exc}")
+                logger.warning("Resend API failed: %s", exc)
+                print(f"[Email] Resend API failed: {exc}")
+
+        # 2. Try Brevo SMTP relay
         if self._smtp:
             try:
                 sent = self._smtp.send_messages(email_messages)
@@ -77,6 +106,7 @@ class ResilientEmailBackend(BaseEmailBackend):
                 logger.warning("Brevo SMTP failed: %s", exc)
                 print(f"[Email] Brevo SMTP failed: {exc}")
 
+        # 3. Try Brevo REST API
         if self._api:
             try:
                 sent = self._api.send_messages(email_messages)
@@ -89,22 +119,23 @@ class ResilientEmailBackend(BaseEmailBackend):
                 logger.warning("Brevo API failed: %s", exc)
                 print(f"[Email] Brevo API failed: {exc}")
 
+        # 4. Console fallback (DEBUG only, does NOT deliver to real inbox)
         if _should_use_console_fallback():
             logger.warning(
                 "EMAIL_CONSOLE_FALLBACK is enabled — email was NOT delivered to inbox."
             )
             print(
-                "\n[Email] WARNING: Brevo delivery failed. Printing to console only "
-                "(set EMAIL_CONSOLE_FALLBACK=false and fix Brevo credentials/IP).\n"
+                "\n[Email] WARNING: All email backends failed. Printing to console only "
+                "(set EMAIL_CONSOLE_FALLBACK=false and configure Resend or Brevo).\n"
             )
             return self._console.send_messages(email_messages)
 
-        detail = "; ".join(errors) or "Brevo is not configured."
+        detail = "; ".join(errors) or "No email backend is configured."
         if self.fail_silently:
             return 0
         raise ConnectionError(
-            f"Could not send email via Brevo. {detail} "
-            "Check EMAIL_HOST_USER, EMAIL_HOST_PASSWORD (xsmtpsib-...), and "
-            "authorize your IP in Brevo (Settings -> Security -> Authorized IPs). "
+            f"Could not send email. {detail} "
+            "Set RESEND_API_KEY in your Render environment variables (recommended), "
+            "or configure Brevo SMTP credentials and authorize your IP. "
             "Run: python manage.py brevo_email_setup"
         )
