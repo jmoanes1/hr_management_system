@@ -47,7 +47,8 @@
 .dir-overview-stat {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    align-items: flex-start;
+    gap: 0.125rem;
     min-width: 0;
     padding: 0 1rem;
     border-right: 1px solid var(--border-subtle);
@@ -68,6 +69,14 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     color: var(--text-muted);
+}
+
+.dir-overview-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    line-height: 1.1;
 }
 
 /* Search + filters + view */

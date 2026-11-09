@@ -77,10 +77,22 @@ class LoginForm(StyledFormMixin, AuthenticationForm):
 
     username = forms.CharField(
         label="Username or email",
+        required=False,
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Username or email address",
                 "autocomplete": "username",
+            }
+        ),
+    )
+
+    password = forms.CharField(
+        label="Password",
+        required=False,
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Password",
+                "autocomplete": "current-password",
             }
         ),
     )

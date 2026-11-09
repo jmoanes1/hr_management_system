@@ -88,9 +88,16 @@
     letter-spacing: 0.04em;
     text-transform: uppercase;
     line-height: 1.35;
-    /* Two-line band (2 x 1.35em) — tall enough that the 32px icon and a
-       wrapped label can never push this cell's value off the shared line. */
+    /* inline-block so min-height applies; keeps the label row a fixed
+       height so the value numbers line up across all stat cards. */
+    display: inline-block;
     min-height: 2.7em;
+}
+
+/* Center the icon vertically beside the label so cells stay tidy when
+   some labels wrap to two lines and others fit on one. */
+.dashboard-page .dash-overview-grid .dash-overview-top {
+    align-items: center;
 }
 
 .dash-overview-value {

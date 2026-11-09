@@ -46,6 +46,12 @@
             <span class="dash-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
             Leave requests
         </a>
+        {% if user.can_manage_employees %}
+        <a href="{% url 'attendance:leave_type_list' %}" class="dash-nav-link">
+            <span class="dash-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M12 2v4M8 2h8M12 18v4M8 18h8"/></svg></span>
+            Leave types
+        </a>
+        {% endif %}
         <a href="{% url 'portal:home' %}" class="dash-nav-link">
             <span class="dash-nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 016-6h4a6 6 0 016 6v1"/></svg></span>
             Self-service

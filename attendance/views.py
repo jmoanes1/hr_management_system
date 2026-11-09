@@ -9,11 +9,12 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
+from django.contrib.auth import get_user_model
 from django.views.decorators.http import require_POST
 
 from accounts.permissions import hr_manager_required
 from attendance.forms import AttendanceCheckForm, LeaveRequestForm, LeaveReviewForm
-from attendance.models import AttendanceRecord, LeaveRequest
+from attendance.models import AttendanceRecord, LeaveRequest, LeaveType
 from attendance.services import (
     count_employees_on_leave,
     get_leave_balances,
@@ -291,6 +292,71 @@ def leave_request_view(request):
         return redirect("attendance:leave_list")
 
     return render(request, "attendance/leave_form.html", form_context)
+
+
+@login_required
+def leave_type_list(request):
+    """List all configured leave types (HR/Admin only)."""
+    if not (request.user.is_super_admin or request.user.role == get_user_model().Role.HR_MANAGER):
+        messages.error(request, "You do not have permission to manage leave types.")
+        return redirect("attendance:leave_list")
+
+    leave_types = LeaveType.objects.all().order_by("name")
+    return render(request, "attendance/leave_type_list.html", {"leave_types": leave_types})
+
+
+@login_required
+def leave_type_create(request):
+    """Create a new leave type (HR/Admin only)."""
+    if not (request.user.is_super_admin or request.user.role == get_user_model().Role.HR_MANAGER):
+        messages.error(request, "You do not have permission to manage leave types.")
+        return redirect("attendance:leave_type_list")
+
+    if request.method == "POST":
+        form = LeaveTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Leave type added successfully.")
+            return redirect("attendance:leave_type_list")
+    else:
+        form = LeaveTypeForm()
+    return render(request, "attendance/leave_type_form.html", {"form": form})
+
+
+@login_required
+def leave_type_edit(request, pk):
+    """Edit an existing leave type (HR/Admin only)."""
+    if not (request.user.is_super_admin or request.user.role == get_user_model().Role.HR_MANAGER):
+        messages.error(request, "You do not have permission to manage leave types.")
+        return redirect("attendance:leave_type_list")
+
+    leave_type = get_object_or_404(LeaveType, pk=pk)
+    if request.method == "POST":
+        form = LeaveTypeForm(request.POST, instance=leave_type)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Leave type updated successfully.")
+            return redirect("attendance:leave_type_list")
+    else:
+        form = LeaveTypeForm(instance=leave_type)
+    return render(request, "attendance/leave_type_form.html", {"form": form, "leave_type": leave_type})
+
+
+@login_required
+def leave_type_delete(request, pk):
+    """Delete a leave type (HR/Admin only)."""
+    if not (request.user.is_super_admin or request.user.role == get_user_model().Role.HR_MANAGER):
+        messages.error(request, "You do not have permission to manage leave types.")
+        return redirect("attendance:leave_type_list")
+
+    leave_type = get_object_or_404(LeaveType, pk=pk)
+    if request.method == "POST":
+        leave_type_name = leave_type.name
+        leave_type.delete()
+        messages.success(request, f'Leave type "{leave_type_name}" deleted successfully.')
+        return redirect("attendance:leave_type_list")
+
+    return render(request, "attendance/leave_type_confirm.html", {"leave_type": leave_type})
 
 
 @login_required

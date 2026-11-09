@@ -24,6 +24,7 @@ class Command(BaseCommand):
             ("Sick Leave", "SL", 10, True, "#dc2626"),
             ("Personal Leave", "PL", 5, False, "#d97706"),
             ("Maternity/Paternity", "MP", 90, True, "#9333ea"),
+            ("Bereavement Leave", "BR", 5, True, "#94a3b8"),
         ]
         for name, code, max_days, is_paid, color in leave_types:
             LeaveType.objects.get_or_create(
